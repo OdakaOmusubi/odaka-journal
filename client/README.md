@@ -1,3 +1,26 @@
+# preparation
+
+## Mac
+
+```
+# install homebrew
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew -v
+
+# install Node.js
+brew install node
+node -v
+npm -v
+
+# install yarn
+brew install yarn
+yarn -v
+
+# install packages locally (including gulp)
+npm install
+```
+
+
 # [![Web Starter Kit](https://cloud.githubusercontent.com/assets/110953/11445049/f05512ba-9520-11e5-8fdb-8c8eb5f690d0.jpg)](https://github.com/google/web-starter-kit/releases/latest)
 
 ## Overview
