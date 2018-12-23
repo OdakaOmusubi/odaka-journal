@@ -2,7 +2,12 @@
 
 ## Project setup
 ```
-npm install
+(install node.js/npm)
+# install vue-cli v3
+npm install -g @vue/cli
+
+# install dependencies
+npm ci (Do not use `npm install`. You should install libs depending on package-lock.json.)
 ```
 
 ### Compiles and hot-reloads for development
