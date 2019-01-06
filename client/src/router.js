@@ -17,6 +17,11 @@ export default new Router({
       component: () => import('./views/TimeLine.vue')
     },
     {
+      path: '/menu',
+      name: 'menu',
+      component: () => import('./views/Menu.vue')
+    },
+    {
       path: '/sign-in',
       name: 'signin',
       component: () => import('./views/Signin.vue')
