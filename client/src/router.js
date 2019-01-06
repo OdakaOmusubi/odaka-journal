@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
-import TimeLine from './components/TimeLine.vue';
 
 Vue.use(Router);
 
@@ -15,7 +14,17 @@ export default new Router({
     {
       path: '/timeline',
       name: 'timeline',
-      component: TimeLine
+      component: () => import('./views/TimeLine.vue')
+    },
+    {
+      path: '/sign-in',
+      name: 'signin',
+      component: () => import('./views/Signin.vue')
+    },
+    {
+      path: '/join',
+      name: 'join',
+      component: () => import('./views/Join.vue')
     },
     {
       path: '/about',
