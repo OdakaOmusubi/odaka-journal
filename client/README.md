@@ -37,3 +37,12 @@ npm run test:unit
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### deploy
+
+```
+npm run build
+firebase deploy --only hosting
+open https://odakajournal.firebaseapp.com
+```
+```
