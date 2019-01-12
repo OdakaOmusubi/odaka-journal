@@ -7,7 +7,7 @@
             <v-toolbar-title>写真を投稿する</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form ref="form" v-model="valid" lazy-validation>
+            <v-form ref="form" v-model="valid">
                 <v-img :src="imageUrl" height="150" v-if="imageUrl" align-center contain/>
                 <v-text-field label="写真を選ぶ" @click="pickFile" v-model="imageName" required prepend-icon="attach_file">
                 </v-text-field>
@@ -75,7 +75,13 @@
 			    }
             },
             submit() {
-                return;
+                if (this.$refs.form.validate()) {
+                    this.$store.dispatch('upload', {
+                        file: this.imageFile,
+                        fileName: this.imageName,
+                        description: this.description
+                    });
+                }
             }
         },
     }

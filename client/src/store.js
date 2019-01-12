@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import router from '@/router';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/storage';
 
 Vue.use(Vuex);
 
@@ -25,6 +26,15 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    upload({ commit, state }, {file, fileName, description}) {
+      const storageRef = firebase.storage().ref();
+      console.log(state.user);
+      const uid = state.user.uid;
+      const fileRef = storageRef.child(`posts/${uid}/${fileName}`)
+      fileRef.put(file).then((snapshot) => {
+        console.log('Uploaded a blob or file!');
+      });
+    },
     userLogin({ commit }, { email, password }) {
       firebase
         .auth()
