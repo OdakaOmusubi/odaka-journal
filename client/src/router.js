@@ -18,6 +18,11 @@ const router = new Router({
       component: () => import('./views/TimeLine.vue')
     },
     {
+      path: '/upload',
+      name: 'upload',
+      component: () => import('./views/Upload.vue')
+    },
+    {
       path: '/menu',
       name: 'menu',
       component: () => import('./views/Menu.vue')

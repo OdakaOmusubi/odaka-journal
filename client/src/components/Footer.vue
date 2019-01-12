@@ -1,8 +1,7 @@
 
 <template>
   <v-footer>
-    <v-spacer class="hidden-sm-and-down"></v-spacer>
-    <v-btn color="success">Post</v-btn>
+    <v-btn justify-end color="success" to="/upload">Post</v-btn>
   </v-footer>
 </template>
 
