@@ -45,7 +45,7 @@ export default {
       drawer: false,
       items: [
         { title: 'Menu', to: '/timeline'},
-        { title: 'Sign In', to: '/signin'},
+        { title: 'Sign In', to: '/sign-in'},
         { title: 'Join', to: 'join' }
       ]
     };
