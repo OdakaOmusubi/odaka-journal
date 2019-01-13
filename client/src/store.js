@@ -38,24 +38,28 @@ export default new Vuex.Store({
     userLogin({ commit }, { email, password }) {
       firebase
         .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(user => {
-          commit('setUser', user);
-          commit('setIsAuthenticated', true);
-          router.push('/timeline');
+        // set login status persistence to LOCAL. Session does not expire until logout.
+        .setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+          firebase.auth()
+          .signInWithEmailAndPassword(email, password)
+          .then(credential => {
+            commit('setUser', credential.user);
+            commit('setIsAuthenticated', true);
+            router.push('/timeline');
+          })
+          .catch(() => {
+            commit('setUser', null);
+            commit('setIsAuthenticated', false);
+            router.push('/');
+          });
         })
-        .catch(() => {
-          commit('setUser', null);
-          commit('setIsAuthenticated', false);
-          router.push('/');
-        });
     },
     userJoin({ commit }, { email, password }) {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(user => {
-          commit('setUser', user);
+        .then(credential => {
+          commit('setUser', credential.user);
           commit('setIsAuthenticated', true);
           router.push('/about');
         })
