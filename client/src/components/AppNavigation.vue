@@ -5,7 +5,9 @@
         <template v-for="(item, index) in items">
           <v-list-tile :key="index">
             <v-list-tile-content>
-              {{item.title}}
+              <router-link :to="item.to">
+                {{item.title}}
+              </router-link>
             </v-list-tile-content>
           </v-list-tile>
           <v-divider :key="`divider-${index}`"></v-divider>
@@ -33,6 +35,7 @@
     </v-toolbar>
   </span>
 </template>
+
 <script>
 export default {
   name: 'AppNavigation',
@@ -41,9 +44,9 @@ export default {
       appTitle: 'Kanade',
       drawer: false,
       items: [
-        { title: 'Menu' },
-        { title: 'Sign In' },
-        { title: 'Join' }
+        { title: 'Menu', to: '/timeline'},
+        { title: 'Sign In', to: '/signin'},
+        { title: 'Join', to: 'join' }
       ]
     };
   },

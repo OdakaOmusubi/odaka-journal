@@ -15,7 +15,15 @@ const router = new Router({
     {
       path: '/timeline',
       name: 'timeline',
-      component: () => import('./views/TimeLine.vue')
+      component: () => import('./views/TimeLine.vue'),
+      meta: {
+        authRequired: true
+      }
+    },
+    {
+      path: '/upload',
+      name: 'upload',
+      component: () => import('./views/Upload.vue')
     },
     {
       path: '/menu',
