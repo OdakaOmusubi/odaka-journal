@@ -14,7 +14,7 @@ export default new Vuex.Store({
   },
   getters: {
     isAuthenticated(state) {
-      return state.user !== null && state.user !== undefined;
+      return state.user !== undefined && state.user !== null;
     }
   },
   mutations: {
@@ -26,9 +26,8 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    upload({ commit, state }, {file, fileName, description}) {
+    upload({ commit, state, getters }, {file, fileName, description}) {
       const storageRef = firebase.storage().ref();
-      console.log(state.user);
       const uid = state.user.uid;
       const fileRef = storageRef.child(`posts/${uid}/${fileName}`)
       fileRef.put(file).then((snapshot) => {
