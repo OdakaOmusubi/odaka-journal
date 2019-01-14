@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'AppNavigation',
   data() {
@@ -50,11 +52,9 @@ export default {
       ]
     };
   },
-  computed: {
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated;
-    }
-  },
+  computed: mapState({
+    isAuthenticated: state => state.isAuthenticated
+  }),
   methods: {
     logout() {
       this.$store.dispatch('userSignOut');

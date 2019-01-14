@@ -28,6 +28,9 @@
 
 <script>
   export default {
+    created: function() {
+        this.$store.dispatch('onAuthStateChanged');
+    },
     data() {
       return {
         valid: false,

@@ -29,6 +29,9 @@
 <script>
 export default {
   name: 'Signin',
+  created: function() {
+      this.$store.dispatch('onAuthStateChanged');
+  },
   data() {
     return {
       valid: false,
@@ -52,6 +55,8 @@ export default {
         this.$store.dispatch('userLogin', {
           email: this.email,
           password: this.password
+        }).then(() => {
+          this.$router.push({ path: '/timeline' });
         });
       }
     }
