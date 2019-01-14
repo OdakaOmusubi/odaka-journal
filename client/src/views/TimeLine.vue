@@ -34,7 +34,7 @@ export default {
           src: 'https://dummyimage.com/600x400/616161/ffffff'
         }
       ]
-    }
+    };
   }
 };
 </script>

@@ -30,7 +30,7 @@
 export default {
   name: 'Signin',
   created: function() {
-      this.$store.dispatch('onAuthStateChanged');
+    this.$store.dispatch('onAuthStateChanged');
   },
   data() {
     return {
@@ -43,21 +43,21 @@ export default {
       ],
       passwordRules: [
         v => !!v || 'Password is required',
-        v =>
-          v.length >= 6 ||
-          'Password must be greater than 6 characters'
+        v => v.length >= 6 || 'Password must be greater than 6 characters'
       ]
     };
   },
   methods: {
     submit() {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('userLogin', {
-          email: this.email,
-          password: this.password
-        }).then(() => {
-          this.$router.push({ path: '/timeline' });
-        });
+        this.$store
+          .dispatch('userLogin', {
+            email: this.email,
+            password: this.password
+          })
+          .then(() => {
+            this.$router.push({ path: '/timeline' });
+          });
       }
     }
   }

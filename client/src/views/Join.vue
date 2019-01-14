@@ -27,36 +27,34 @@
 </template>
 
 <script>
-  export default {
-    created: function() {
-        this.$store.dispatch('onAuthStateChanged');
-    },
-    data() {
-      return {
-        valid: false,
-        email: '',
-        password: '',
-        emailRules: [
-          v => !!v || 'E-mail is required',
-          v => /.+@.+/.test(v) || 'E-mail must be valid'
-        ],
-        passwordRules: [
-          v => !!v || 'Password is required',
-          v =>
-            v.length >= 6 ||
-            'Password must be greater than 6 characters'
-        ]
-      };
-    },
-    methods: {
-      submit() {
-        if (this.$refs.form.validate()) {
-          this.$store.dispatch('userJoin', {
-            email: this.email,
-            password: this.password
-          });
-        }
+export default {
+  created: function() {
+    this.$store.dispatch('onAuthStateChanged');
+  },
+  data() {
+    return {
+      valid: false,
+      email: '',
+      password: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v => v.length >= 6 || 'Password must be greater than 6 characters'
+      ]
+    };
+  },
+  methods: {
+    submit() {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('userJoin', {
+          email: this.email,
+          password: this.password
+        });
       }
     }
   }
+};
 </script>

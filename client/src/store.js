@@ -26,23 +26,24 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    upload({ commit, state, getters }, {file, fileName, description}) {
+    upload({ commit, state, getters }, { file, fileName, description }) {
       const storageRef = firebase.storage().ref();
       const uid = state.user.uid;
-      const fileRef = storageRef.child(`posts/${uid}/${fileName}`)
-      fileRef.put(file).then((snapshot) => {
+      const fileRef = storageRef.child(`posts/${uid}/${fileName}`);
+      fileRef.put(file).then(snapshot => {
         console.log('Uploaded a blob or file!');
       });
     },
     onAuthStateChanged({ commit }) {
       firebase.auth().onAuthStateChanged(user => {
-          user = user ? user : {};
-          commit('onAuthStateChanged', user);
-          commit('setIsAuthenticated', user.uid ? true : false);
-      })
+        user = user ? user : {};
+        commit('onAuthStateChanged', user);
+        commit('setIsAuthenticated', user.uid ? true : false);
+      });
     },
     async userLogin({ commit }, { email, password }) {
-      firebase.auth()
+      firebase
+        .auth()
         .signInWithEmailAndPassword(email, password)
         .catch(() => {
           router.push('/');

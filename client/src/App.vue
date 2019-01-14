@@ -16,10 +16,10 @@ export default {
   components: {
     AppNavigation
   },
-  data () {
+  data() {
     return {
       //
-    }
+    };
   }
-}
+};
 </script>
