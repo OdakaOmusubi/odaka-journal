@@ -41,7 +41,7 @@ export default new Vuex.Store({
         commit('setIsAuthenticated', user.uid ? true : false);
       });
     },
-    async userLogin({ email, password }) {
+    async userLogin({}, { email, password }) {
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
@@ -49,7 +49,7 @@ export default new Vuex.Store({
           router.push('/');
         });
     },
-    userJoin({ email, password }) {
+    userJoin({}, { email, password }) {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
