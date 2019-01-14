@@ -14,12 +14,12 @@ export default new Vuex.Store({
   },
   getters: {
     isAuthenticated(state) {
-      return state.user !== undefined && state.user !== null;
+      return state.user !== null && state.user !== undefined;
     }
   },
   mutations: {
-    setUser(state, payload) {
-      state.user = payload;
+    onAuthStateChanged(state, user) {
+      state.user = user;
     },
     setIsAuthenticated(state, payload) {
       state.isAuthenticated = payload;
@@ -34,37 +34,28 @@ export default new Vuex.Store({
         console.log('Uploaded a blob or file!');
       });
     },
-    userLogin({ commit }, { email, password }) {
-      firebase
-        .auth()
-        // set login status persistence to LOCAL. Session does not expire until logout.
-        .setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-          firebase.auth()
-          .signInWithEmailAndPassword(email, password)
-          .then(credential => {
-            commit('setUser', credential.user);
-            commit('setIsAuthenticated', true);
-            router.push('/timeline');
-          })
-          .catch(() => {
-            commit('setUser', null);
-            commit('setIsAuthenticated', false);
-            router.push('/');
-          });
-        })
+    onAuthStateChanged({ commit }) {
+      firebase.auth().onAuthStateChanged(user => {
+          user = user ? user : {};
+          commit('onAuthStateChanged', user);
+          commit('setIsAuthenticated', user.uid ? true : false);
+      })
+    },
+    async userLogin({ commit }, { email, password }) {
+      firebase.auth()
+        .signInWithEmailAndPassword(email, password)
+        .catch(() => {
+          router.push('/');
+        });
     },
     userJoin({ commit }, { email, password }) {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(credential => {
-          commit('setUser', credential.user);
-          commit('setIsAuthenticated', true);
           router.push('/about');
         })
         .catch(() => {
-          commit('setUser', null);
-          commit('setIsAuthenticated', false);
           router.push('/');
         });
     },
@@ -73,13 +64,9 @@ export default new Vuex.Store({
         .auth()
         .signOut()
         .then(() => {
-          commit('setUser', null);
-          commit('setIsAuthenticated', false);
           router.push('/');
         })
         .catch(() => {
-          commit('setUser', null);
-          commit('setIsAuthenticated', false);
           router.push('/');
         });
     }
