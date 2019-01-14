@@ -13,7 +13,6 @@ const config = {
 export default {
   // init should be called in main.js
   init() {
-    console.log('Firebase init()');
     firebase.initializeApp(config);
     // set login status persistence to LOCAL. Session does not expire until logout.
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);

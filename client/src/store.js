@@ -26,11 +26,11 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    upload({ commit, state, getters }, { file, fileName, description }) {
+    upload({ state }, { file, fileName, description }) {
       const storageRef = firebase.storage().ref();
       const uid = state.user.uid;
       const fileRef = storageRef.child(`posts/${uid}/${fileName}`);
-      fileRef.put(file).then(snapshot => {
+      fileRef.put(file).then(() => {
         console.log('Uploaded a blob or file!');
       });
     },
@@ -41,7 +41,7 @@ export default new Vuex.Store({
         commit('setIsAuthenticated', user.uid ? true : false);
       });
     },
-    async userLogin({ commit }, { email, password }) {
+    async userLogin({ email, password }) {
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
@@ -49,18 +49,18 @@ export default new Vuex.Store({
           router.push('/');
         });
     },
-    userJoin({ commit }, { email, password }) {
+    userJoin({ email, password }) {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(credential => {
+        .then(() => {
           router.push('/about');
         })
         .catch(() => {
           router.push('/');
         });
     },
-    userSignOut({ commit }) {
+    userSignOut() {
       firebase
         .auth()
         .signOut()
