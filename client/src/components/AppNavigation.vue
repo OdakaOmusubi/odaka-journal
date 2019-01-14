@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 
 export default {
   name: 'AppNavigation',
@@ -46,8 +46,8 @@ export default {
       appTitle: 'Kanade',
       drawer: false,
       items: [
-        { title: 'Menu', to: '/timeline'},
-        { title: 'Sign In', to: '/sign-in'},
+        { title: 'Menu', to: '/timeline' },
+        { title: 'Sign In', to: '/sign-in' },
         { title: 'Join', to: 'join' }
       ]
     };

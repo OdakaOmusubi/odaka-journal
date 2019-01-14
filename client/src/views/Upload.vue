@@ -35,54 +35,56 @@
 </template>
 
 <script>
-    export default {
-        name: 'upload',
-        data() {
-            const maxDescriptionLength = 200;
-            return {
-                valid: false,
-                imageName: '',
-                imageUrl: '',
-                imageFile: '',
-                description: '',
-                descriptionRules: [
-                    v => v.length > 0,
-                    v => v.length <= maxDescriptionLength || `説明は最大 ${maxDescriptionLength} 文字まで入力可能です`
-                ]
-            }
-        },
-        methods: {
-            pickFile() {
-                this.$refs.image.click()
-            },
-            onFilePicked(event) {
-                const files = event.target.files
-			    if(files[0] !== undefined) {
-			    	this.imageName = files[0].name
-			    	if(this.imageName.lastIndexOf('.') <= 0) {
-			    		return
-			    	}
-			    	const fr = new FileReader ()
-			    	fr.readAsDataURL(files[0])
-			    	fr.addEventListener('load', () => {
-			    		this.imageUrl = fr.result
-			    		this.imageFile = files[0]
-			    	})
-			    } else {
-			    	this.imageName = ''
-			    	this.imageFile = ''
-			    	this.imageUrl = ''
-			    }
-            },
-            submit() {
-                if (this.$refs.form.validate()) {
-                    this.$store.dispatch('upload', {
-                        file: this.imageFile,
-                        fileName: this.imageName,
-                        description: this.description
-                    });
-                }
-            }
-        },
+export default {
+  name: 'upload',
+  data() {
+    const maxDescriptionLength = 200;
+    return {
+      valid: false,
+      imageName: '',
+      imageUrl: '',
+      imageFile: '',
+      description: '',
+      descriptionRules: [
+        v => v.length > 0,
+        v =>
+          v.length <= maxDescriptionLength ||
+          `説明は最大 ${maxDescriptionLength} 文字まで入力可能です`
+      ]
+    };
+  },
+  methods: {
+    pickFile() {
+      this.$refs.image.click();
+    },
+    onFilePicked(event) {
+      const files = event.target.files;
+      if (files[0] !== undefined) {
+        this.imageName = files[0].name;
+        if (this.imageName.lastIndexOf('.') <= 0) {
+          return;
+        }
+        const fr = new FileReader();
+        fr.readAsDataURL(files[0]);
+        fr.addEventListener('load', () => {
+          this.imageUrl = fr.result;
+          this.imageFile = files[0];
+        });
+      } else {
+        this.imageName = '';
+        this.imageFile = '';
+        this.imageUrl = '';
+      }
+    },
+    submit() {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('upload', {
+          file: this.imageFile,
+          fileName: this.imageName,
+          description: this.description
+        });
+      }
     }
+  }
+};
 </script>
