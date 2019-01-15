@@ -53,28 +53,30 @@ export default new Vuex.Store({
       const fileRef = storageRef.child(imageStorePath);
       fileRef.put(file).then(() => {
         console.log('Uploaded a blob or file!');
+        fileRef.getDownloadURL().then(downloadUrl => {
+          Firebase.firestore
+            .collection('posts')
+            .add({
+              author: {
+                people_ref: `people/${uid}`,
+                uid: uid
+              },
+              image_url: downloadUrl,
+              text: description,
+              thumb_image_url: '',
+              title: '',
+              created_at: Date.now() / 1000,
+              updated_at: Date.now() / 1000
+            })
+            .then(function(docRef) {
+              console.log('Document written with ID: ', docRef.id);
+              router.push('/timeline');
+            })
+            .catch(function(error) {
+              console.error('Error adding document: ', error);
+            });
+        });
 
-        Firebase.firestore
-          .collection('posts')
-          .add({
-            author: {
-              people_ref: `people/${uid}`,
-              uid: uid
-            },
-            image_url: imageStorePath,
-            text: description,
-            thumb_image_url: '',
-            title: '',
-            created_at: Date.now() / 1000,
-            updated_at: Date.now() / 1000
-          })
-          .then(function(docRef) {
-            console.log('Document written with ID: ', docRef.id);
-            router.push('/timeline');
-          })
-          .catch(function(error) {
-            console.error('Error adding document: ', error);
-          });
       });
     },
     onAuthStateChanged({ commit }) {
