@@ -3,13 +3,15 @@ import Vuex from 'vuex';
 import router from '@/router';
 import Firebase from './firebase/index.js';
 import md5 from 'md5';
+import { querystring } from '@firebase/util';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     user: null,
-    isAuthenticated: false
+    isAuthenticated: false,
+    posts: []
   },
   getters: {
     isAuthenticated(state) {
@@ -22,9 +24,26 @@ export default new Vuex.Store({
     },
     setIsAuthenticated(state, payload) {
       state.isAuthenticated = payload;
+    },
+    setPosts(state, payload) {
+      state.posts = payload;
     }
   },
   actions: {
+    fetchPosts({ commit }) {
+      console.log('store fetchPosts');
+      const sevenDaysPeriodSec = 60 * 60 * 24 * 7;
+      Firebase.firestore.collection('posts')
+      .where('updated_at', '>=', (Date.now()/1000 - sevenDaysPeriodSec))
+      .onSnapshot(querySnapshot => {
+        let posts = [];
+        querySnapshot.forEach(doc => {
+          console.log(doc.data());
+          posts.push(doc.data());
+        });
+        commit('setPosts', posts);
+      });
+    },
     upload({ state }, { file, fileName, description }) {
       const storageRef = Firebase.storage.ref();
       const uid = state.user.uid;

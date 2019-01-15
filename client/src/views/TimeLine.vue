@@ -4,9 +4,9 @@
      <v-layout row wrap>
       <v-carousel fluid>
          <v-carousel-item
-         v-for="(item,i) in items"
+         v-for="(item,i) in posts"
          :key="i"
-         :src="item.src"
+         :src="item.image_url"
          ></v-carousel-item>
       </v-carousel>
       <v-flex>
@@ -19,22 +19,31 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'timeline',
   data() {
     return {
-      items: [
-        {
-          src: 'https://dummyimage.com/600x400/616161/ffffff'
-        },
-        {
-          src: 'https://dummyimage.com/600x400/616161/ffffff'
-        },
-        {
-          src: 'https://dummyimage.com/600x400/616161/ffffff'
-        }
-      ]
+      // items: [
+      //   {
+      //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
+      //   },
+      //   {
+      //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
+      //   },
+      //   {
+      //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
+      //   }
+      // ]
     };
+  },
+  computed: mapState(['posts']),
+  created() {
+     console.log('timeline created');
+      this.$store.dispatch('fetchPosts');
+  },
+  methods: {
   }
 };
 </script>
