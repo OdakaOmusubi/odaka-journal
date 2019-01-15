@@ -26,7 +26,7 @@ export default new Vuex.Store({
   },
   actions: {
     upload({ state }, { file, fileName, description }) {
-      const storageRef = firebase.storage().ref();
+      const storageRef = Firebase.storage.ref();
       const uid = state.user.uid;
       const hash = md5(uid + Date.now().toString());
       const [x, extention] = fileName.split('.');
@@ -80,13 +80,13 @@ export default new Vuex.Store({
             created_at: Date.now()/1000,
             updated_at: Date.now()/1000
           })
-          .then(function(docRef) {
-            console.log("Document written with ID: ", docRef.id);
+          .then(function() {
+            console.log("Document successfully written.");
+            router.push('/about');
           })
           .catch(function(error) {
               console.error("Error adding document: ", error);
           });
-          router.push('/about');
         })
         .catch(() => {
           router.push('/');
