@@ -40,10 +40,9 @@ export default {
   },
   computed: mapState(['posts']),
   created() {
-     console.log('timeline created');
-      this.$store.dispatch('fetchPosts');
+    console.log('timeline created');
+    this.$store.dispatch('fetchPosts');
   },
-  methods: {
-  }
+  methods: {}
 };
 </script>

@@ -33,16 +33,17 @@ export default new Vuex.Store({
     fetchPosts({ commit }) {
       console.log('store fetchPosts');
       const sevenDaysPeriodSec = 60 * 60 * 24 * 7;
-      Firebase.firestore.collection('posts')
-      .where('updated_at', '>=', (Date.now()/1000 - sevenDaysPeriodSec))
-      .onSnapshot(querySnapshot => {
-        let posts = [];
-        querySnapshot.forEach(doc => {
-          console.log(doc.data());
-          posts.push(doc.data());
+      Firebase.firestore
+        .collection('posts')
+        .where('updated_at', '>=', Date.now() / 1000 - sevenDaysPeriodSec)
+        .onSnapshot(querySnapshot => {
+          let posts = [];
+          querySnapshot.forEach(doc => {
+            console.log(doc.data());
+            posts.push(doc.data());
+          });
+          commit('setPosts', posts);
         });
-        commit('setPosts', posts);
-      });
     },
     upload({ state }, { file, fileName, description }) {
       const storageRef = Firebase.storage.ref();
@@ -76,7 +77,6 @@ export default new Vuex.Store({
               console.error('Error adding document: ', error);
             });
         });
-
       });
     },
     onAuthStateChanged({ commit }) {
