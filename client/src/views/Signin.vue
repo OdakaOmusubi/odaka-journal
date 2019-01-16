@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height>
+  <v-container fluid fill-height class="home-hero">
     <v-layout align-center justify-center>
       <v-flex xs12 sm8 md4>
         <v-card class="elevation-12">
@@ -65,4 +65,11 @@ export default {
 </script>
 
 <style scoped>
+</style>
+
+<style scoped>
+.home-hero {
+  background: url('https://storage.googleapis.com/odaka-journal/prod/splash_comp.jpg');
+  background-size: cover;
+}
 </style>

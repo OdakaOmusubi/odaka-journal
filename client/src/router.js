@@ -8,11 +8,6 @@ Vue.use(Router);
 const router = new Router({
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
       path: '/timeline',
       name: 'timeline',
       component: () => import('./views/TimeLine.vue'),
@@ -23,12 +18,18 @@ const router = new Router({
     {
       path: '/upload',
       name: 'upload',
-      component: () => import('./views/Upload.vue')
+      component: () => import('./views/Upload.vue'),
+      meta: {
+        authRequired: true
+      }
     },
     {
       path: '/menu',
       name: 'menu',
-      component: () => import('./views/Menu.vue')
+      component: () => import('./views/Menu.vue'),
+      meta: {
+        authRequired: true
+      }
     },
     {
       path: '/sign-in',
