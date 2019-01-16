@@ -63,12 +63,12 @@ router.beforeEach((to, from, next) => {
     // no matched access
     next({ path: '/sign-in' });
   }
-  // if (to.matched.some(record => record.meta.noAccessWithAuth)) {
-  //   if (store.getters.isAuthenticated) {
-  //     console.log('guard noaccess')
-  //     next({ path: '/timeline'});
-  //   }
-  // }
+  if (to.matched.some(record => record.meta.noAccessWithAuth)) {
+    if (store.state.user) {
+      console.log('guard noaccess')
+      router.go(-1);
+    }
+  }
   if (to.matched.some(record => record.meta.authRequired)) {
     if (!store.state.user) {
       console.log('not auth. go to sign-in')
