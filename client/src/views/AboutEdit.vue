@@ -8,7 +8,8 @@
           </v-toolbar>
           <v-card-text>
             <v-form ref="form" v-model="valid">
-                <v-img :src="imageUrl" height="150" v-if="imageUrl" align-center contain/>
+                <div class="subheading">プロフィール写真</div>
+                <v-img :src="imageUrl" class="profile-image" v-if="imageUrl" align-center justify-center contain/>
                 <v-text-field label="写真を選ぶ" @click="pickFile" v-model="imageName" required prepend-icon="attach_file">
                 </v-text-field>
                 <input
@@ -89,3 +90,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.profile-image {
+    height: 5em;
+    width: 5em;
+    border-radius: 50%;
+    border: 1px solid #D3D3D3;
+}
+</style>
