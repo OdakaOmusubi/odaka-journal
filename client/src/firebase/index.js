@@ -1,7 +1,9 @@
+import Vue from 'vue'
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
+import store from '../store';
 
 const config = {
   apiKey: 'AIzaSyBZ6d-v6tp1v-gI0rn3gZdLnkltA98tjyU',
@@ -14,9 +16,21 @@ const config = {
 
 firebase.initializeApp(config);
 // set login status persistence to LOCAL. Session does not expire until logout.
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
 const auth = firebase.auth();
+Vue.prototype.$auth = {
+    login: async (username, pass) => {
+        return await auth.signInWithEmailAndPassword(username, pass);
+    },
+    logout: async () => {
+        await auth.signOut();
+    }
+}
+auth.onAuthStateChanged(user => {
+    store.commit('updateUser', { user });
+});
+
 const storage = firebase.storage();
 const firestore = firebase.firestore();
 const settings = {
