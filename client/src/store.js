@@ -11,7 +11,8 @@ export default new Vuex.Store({
   state: {
     user: null,
     isAuthenticated: false,
-    posts: []
+    posts: [],
+    offPostsListener: null
   },
   getters: {
     isAuthenticated(state) {
@@ -27,13 +28,16 @@ export default new Vuex.Store({
     },
     setPosts(state, payload) {
       state.posts = payload;
+    },
+    setOffPostsListener(state, payload) {
+      state.offPostsListener = payload;
     }
   },
   actions: {
     fetchPosts({ commit }) {
       console.log('store fetchPosts');
       const sevenDaysPeriodSec = 60 * 60 * 24 * 7;
-      Firebase.firestore
+      const unsubscribeFunc = Firebase.firestore
         .collection('posts')
         .where('updated_at', '>=', Date.now() / 1000 - sevenDaysPeriodSec)
         .onSnapshot(querySnapshot => {
@@ -44,6 +48,7 @@ export default new Vuex.Store({
           });
           commit('setPosts', posts);
         });
+      commit('setOffPostsListener', unsubscribeFunc);
     },
     upload({ state }, { file, fileName, description }) {
       const storageRef = Firebase.storage.ref();

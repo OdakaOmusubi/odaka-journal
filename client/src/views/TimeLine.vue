@@ -38,10 +38,14 @@ export default {
       // ]
     };
   },
-  computed: mapState(['posts']),
+  computed: mapState(['posts', 'offPostsListener']),
   created() {
     console.log('timeline created');
     this.$store.dispatch('fetchPosts');
+  },
+  beforeDestroy() {
+     console.log("timeline before destroy");
+    this.offPostsListener();
   },
   methods: {}
 };
