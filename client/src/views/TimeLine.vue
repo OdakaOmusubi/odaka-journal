@@ -6,7 +6,7 @@
          <v-carousel-item
          v-for="(item,i) in posts"
          :key="i"
-         :src="item.image_url"
+         :src="item.imageUrl"
          ></v-carousel-item>
       </v-carousel>
       <v-flex>

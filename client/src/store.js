@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import router from '@/router';
 import Firebase from './firebase/index.js';
 import md5 from 'md5';
-import { querystring } from '@firebase/util';
 
 Vue.use(Vuex);
 
@@ -35,7 +34,7 @@ export default new Vuex.Store({
       const sevenDaysPeriodSec = 60 * 60 * 24 * 7;
       const unsubscribeFunc = Firebase.firestore
         .collection('posts')
-        .where('updated_at', '>=', Date.now() / 1000 - sevenDaysPeriodSec)
+        .where('updatedAt', '>=', Date.now() / 1000 - sevenDaysPeriodSec)
         .onSnapshot(querySnapshot => {
           let posts = [];
           querySnapshot.forEach(doc => {
@@ -59,15 +58,15 @@ export default new Vuex.Store({
             .collection('posts')
             .add({
               author: {
-                people_ref: `people/${uid}`,
+                peopleRef: `people/${uid}`,
                 uid: uid
               },
-              image_url: downloadUrl,
+              imageUrl: downloadUrl,
               text: description,
-              thumb_image_url: '',
+              profileImageUrl: '',
               title: '',
-              created_at: Date.now() / 1000,
-              updated_at: Date.now() / 1000
+              createdAt: Date.now() / 1000,
+              updatedAt: Date.now() / 1000
             })
             .then(function(docRef) {
               console.log('Document written with ID: ', docRef.id);
@@ -79,16 +78,9 @@ export default new Vuex.Store({
         });
       });
     },
-    onAuthStateChanged({ commit }) {
-      Firebase.auth.onAuthStateChanged(user => {
-        user = user ? user : {};
-        commit('onAuthStateChanged', user);
-      });
-    },
-    async userLogin({ commit }, { email, password }) {
+    async userLogin({}, { email, password }) {
       Firebase.auth.signInWithEmailAndPassword(email, password)
       .then(() => {
-        commit('setIsAuthenticated', true);
         router.push('/timeline');
       })
       .catch((error) => {
@@ -96,28 +88,21 @@ export default new Vuex.Store({
         router.push('/sign-in');
       });
     },
-    userJoin({ commit }, { email, password }) {
-      Firebase.auth
-        .createUserWithEmailAndPassword(email, password)
-        .then(credential => {
-          Firebase.firestore
-            .collection('people')
-            .doc(credential.user.uid)
-            .set({
-              created_at: Date.now() / 1000,
-              updated_at: Date.now() / 1000
-            })
-            .then(function() {
-              console.log('Document successfully written.');
-              commit('setIsAuthenticated', true);
-              router.push('/about');
-            })
-            .catch(function(error) {
-              console.error('Error adding document: ', error);
-            });
+    userJoin({}, { user, name, profileImageUrl }) {
+      Firebase.firestore
+        .collection('people')
+        .doc(user.uid)
+        .set({
+          fullName: name,
+          profileImageUrl: profileImageUrl,
+          createdAt: Date.now() / 1000,
+          updatedAt: Date.now() / 1000
         })
-        .catch(() => {
-          router.push('/join');
+        .then(function() {
+          console.log('Document successfully written.');
+        })
+        .catch(function(error) {
+          console.error('Error adding document: ', error);
         });
 
     },

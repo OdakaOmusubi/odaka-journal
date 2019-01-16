@@ -27,10 +27,10 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import {mapGetters} from 'vuex'
+
 export default {
-  created: function() {
-    this.$store.dispatch('onAuthStateChanged');
-  },
   data() {
     return {
       valid: false,
@@ -46,13 +46,33 @@ export default {
       ]
     };
   },
+  computed: mapState(['user']),
+  watch: {
+      getUser (auth) {
+        if(!!auth){
+          this.$router.push({ path: '/about'});
+        }
+      }
+  },
   methods: {
-    submit() {
+    async submit() {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('userJoin', {
-          email: this.email,
-          password: this.password
-        });
+          this.$auth.createUser(this.email, this.password)
+          .then(userCredential => {
+            this.$store.dispatch('userJoin', {
+               user: userCredential.user,
+               name: '',
+               profileImageUrl: ''
+            })
+            .then(() => {
+              if (this.user != null) {
+                this.$router.push({ path: '/about' });
+              }
+            });
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
     }
   }
