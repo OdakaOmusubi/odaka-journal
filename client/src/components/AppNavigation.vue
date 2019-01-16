@@ -1,6 +1,6 @@
 <template>
   <span>
-    <v-navigation-drawer app v-model="drawer" class="brown lighten-2" dark disable-resize-watcher>
+    <v-navigation-drawer v-if=false app v-model="drawer" class="brown lighten-2" dark disable-resize-watcher>
       <v-list>
         <template v-for="(item, index) in items">
           <v-list-tile :key="index">
@@ -17,12 +17,9 @@
     <v-toolbar app color="brown darken-4" dark>
       <v-toolbar-side-icon class="hidden-md-and-up" @click="drawer = !drawer"></v-toolbar-side-icon>
       <v-spacer class="hidden-md-and-up"></v-spacer>
-      <router-link to="/">
-        <v-toolbar-title to="/">{{appTitle}}</v-toolbar-title>
+      <router-link to="/timeline">
+        <v-toolbar-title to="/timeline">{{appTitle}}</v-toolbar-title>
       </router-link>
-      <div v-if="user" class="hidden-sm-and-down">
-        <v-btn flat class="hidden-sm-and-down" to="/menu">メニュー</v-btn>
-      </div>
       <v-spacer class="hidden-sm-and-down"></v-spacer>
       <div v-if="!user" class="hidden-sm-and-down">
         <v-btn flat to="/sign-in">ログイン</v-btn>
@@ -43,10 +40,10 @@ export default {
   name: 'AppNavigation',
   data() {
     return {
-      appTitle: 'Kanade',
+      appTitle: 'KANADE',
       drawer: false,
       items: [
-        { title: 'メニュー', to: '/timeline' },
+        { title: 'ホーム', to: '/timeline' },
         { title: 'ログイン', to: '/sign-in' },
         { title: '新規登録', to: 'join' }
       ]

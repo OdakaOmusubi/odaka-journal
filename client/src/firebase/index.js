@@ -20,6 +20,9 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
 const auth = firebase.auth();
 Vue.prototype.$auth = {
+    createUser: async (username, pass) => {
+        return auth.createUserWithEmailAndPassword(username, pass);
+    },
     login: async (username, pass) => {
         return await auth.signInWithEmailAndPassword(username, pass);
     },
