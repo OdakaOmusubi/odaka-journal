@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
 import store from '@/store.js';
 
 Vue.use(Router);
@@ -38,7 +37,10 @@ const router = new Router({
     {
       path: '/sign-in',
       name: 'signin',
-      component: () => import('./views/Signin.vue')
+      component: () => import('./views/Signin.vue'),
+      meta: {
+        noAccessWithAuth: true
+      }
     },
     {
       path: '/join',
@@ -61,8 +63,15 @@ router.beforeEach((to, from, next) => {
     // no matched access
     next({ path: '/sign-in' });
   }
+  // if (to.matched.some(record => record.meta.noAccessWithAuth)) {
+  //   if (store.getters.isAuthenticated) {
+  //     console.log('guard noaccess')
+  //     next({ path: '/timeline'});
+  //   }
+  // }
   if (to.matched.some(record => record.meta.authRequired)) {
-    if (!store.getters.isAuthenticated) {
+    if (!store.state.user) {
+      console.log('not auth. go to sign-in')
       next({ path: '/sign-in' });
     } else {
       next();

@@ -20,11 +20,11 @@
       <router-link to="/">
         <v-toolbar-title to="/">{{appTitle}}</v-toolbar-title>
       </router-link>
-      <div v-if="isAuthenticated" class="hidden-sm-and-down">
+      <div v-if="user" class="hidden-sm-and-down">
         <v-btn flat class="hidden-sm-and-down" to="/menu">メニュー</v-btn>
       </div>
       <v-spacer class="hidden-sm-and-down"></v-spacer>
-      <div v-if="!isAuthenticated" class="hidden-sm-and-down">
+      <div v-if="!user" class="hidden-sm-and-down">
         <v-btn flat to="/sign-in">ログイン</v-btn>
         <v-btn color="brown lighten-3" to="/join">新規登録</v-btn>
       </div>
@@ -53,7 +53,7 @@ export default {
     };
   },
   computed: mapState({
-    isAuthenticated: state => state.isAuthenticated
+    user: state => state.user
   }),
   methods: {
     logout() {

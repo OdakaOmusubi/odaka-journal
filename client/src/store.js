@@ -10,21 +10,17 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: null,
-    isAuthenticated: false,
     posts: [],
     offPostsListener: null
   },
   getters: {
-    isAuthenticated(state) {
-      return state.user !== null && state.user !== undefined;
+    getUser(state) {
+      return state.user;
     }
   },
   mutations: {
-    onAuthStateChanged(state, user) {
-      state.user = user;
-    },
-    setIsAuthenticated(state, payload) {
-      state.isAuthenticated = payload;
+    updateUser(state, { user }) {
+      Vue.set(state, 'user', user);
     },
     setPosts(state, payload) {
       state.posts = payload;
@@ -43,7 +39,6 @@ export default new Vuex.Store({
         .onSnapshot(querySnapshot => {
           let posts = [];
           querySnapshot.forEach(doc => {
-            console.log(doc.data());
             posts.push(doc.data());
           });
           commit('setPosts', posts);
@@ -88,15 +83,20 @@ export default new Vuex.Store({
       Firebase.auth.onAuthStateChanged(user => {
         user = user ? user : {};
         commit('onAuthStateChanged', user);
-        commit('setIsAuthenticated', user.uid ? true : false);
       });
     },
-    async userLogin({}, { email, password }) {
-      Firebase.auth.signInWithEmailAndPassword(email, password).catch(() => {
+    async userLogin({ commit }, { email, password }) {
+      Firebase.auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        commit('setIsAuthenticated', true);
         router.push('/timeline');
+      })
+      .catch((error) => {
+        console.log(error);
+        router.push('/sign-in');
       });
     },
-    userJoin({}, { email, password }) {
+    userJoin({ commit }, { email, password }) {
       Firebase.auth
         .createUserWithEmailAndPassword(email, password)
         .then(credential => {
@@ -109,6 +109,7 @@ export default new Vuex.Store({
             })
             .then(function() {
               console.log('Document successfully written.');
+              commit('setIsAuthenticated', true);
               router.push('/about');
             })
             .catch(function(error) {
@@ -118,6 +119,7 @@ export default new Vuex.Store({
         .catch(() => {
           router.push('/join');
         });
+
     },
     userSignOut() {
       Firebase.auth

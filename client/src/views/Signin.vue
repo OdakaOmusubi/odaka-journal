@@ -18,7 +18,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" :disabled="!valid" @click="submit">ログインする</v-btn>
+            <v-btn color="primary" :disabled="!valid" @click.prevent="submit">ログインする</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -27,10 +27,12 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+
 export default {
   name: 'Signin',
-  created: function() {
-    this.$store.dispatch('onAuthStateChanged');
+  computed: {
+    ...mapGetters(['getUser'])
   },
   data() {
     return {
@@ -47,17 +49,20 @@ export default {
       ]
     };
   },
+  watch: {
+      getUser (auth) {
+        if(!!auth){
+          this.$router.push({ path: '/timeline'});
+        }
+      }
+  },
   methods: {
-    submit() {
+    async submit() {
       if (this.$refs.form.validate()) {
-        this.$store
-          .dispatch('userLogin', {
-            email: this.email,
-            password: this.password
-          })
-          .then(() => {
+          const auth = await this.$auth.login(this.email, this.password);
+          if (auth.user != null) {
             this.$router.push({ path: '/timeline' });
-          });
+          }
       }
     }
   }
