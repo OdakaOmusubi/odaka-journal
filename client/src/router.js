@@ -8,6 +8,10 @@ Vue.use(Router);
 const router = new Router({
   routes: [
     {
+      path: '/',
+      redirect: '/sign-in'
+    },
+    {
       path: '/timeline',
       name: 'timeline',
       component: () => import('./views/TimeLine.vue'),
@@ -53,11 +57,13 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  if (to.matched.length === 0 || to.matched.some(record => record.path === '/')) {
+    // no matched access
+    next({ path: '/sign-in' });
+  }
   if (to.matched.some(record => record.meta.authRequired)) {
     if (!store.getters.isAuthenticated) {
-      next({
-        path: '/sign-in'
-      });
+      next({ path: '/sign-in' });
     } else {
       next();
     }

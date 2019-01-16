@@ -93,7 +93,7 @@ export default new Vuex.Store({
     },
     async userLogin({}, { email, password }) {
       Firebase.auth.signInWithEmailAndPassword(email, password).catch(() => {
-        router.push('/');
+        router.push('/timeline');
       });
     },
     userJoin({}, { email, password }) {
@@ -116,17 +116,17 @@ export default new Vuex.Store({
             });
         })
         .catch(() => {
-          router.push('/');
+          router.push('/join');
         });
     },
     userSignOut() {
       Firebase.auth
         .signOut()
         .then(() => {
-          router.push('/');
+          router.push('/sign-in');
         })
         .catch(() => {
-          router.push('/');
+          router.push('/sign-in');
         });
     }
   }
