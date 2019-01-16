@@ -4,7 +4,7 @@
       <v-flex xs12 sm8 md4>
         <v-card class="elevation-12">
           <v-toolbar dark color="primary">
-            <v-toolbar-title>新規登録情報</v-toolbar-title>
+            <v-toolbar-title>新規ユーザー登録</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-form ref="form" v-model="valid" lazy-validation>
@@ -81,7 +81,7 @@ export default {
 
 <style scoped>
 .home-hero {
-  background: url('https://storage.googleapis.com/odaka-journal/prod/splash_comp.jpg');
+  background: url('https://storage.googleapis.com/odakajournal.appspot.com/splash_comp.jpg');
   background-size: cover;
 }
 </style>

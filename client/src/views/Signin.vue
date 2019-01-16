@@ -74,7 +74,7 @@ export default {
 
 <style scoped>
 .home-hero {
-  background: url('https://storage.googleapis.com/odaka-journal/prod/splash_comp.jpg');
+  background: url('https://storage.googleapis.com/odakajournal.appspot.com/splash_comp.jpg');
   background-size: cover;
 }
 </style>
