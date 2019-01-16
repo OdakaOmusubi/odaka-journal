@@ -4,7 +4,7 @@
       <v-flex xs12 sm8 md4>
         <v-card class="elevation-12">
           <v-toolbar dark color="primary">
-            <v-toolbar-title>写真を投稿する</v-toolbar-title>
+            <v-toolbar-title>プロフィールを編集する</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-form ref="form" v-model="valid">
@@ -18,15 +18,15 @@
                     accept="image/*"
                     @change="onFilePicked"
                 >
-               <v-textarea name="description" label="説明を書く" id="description"
-                             type="text" required v-model="description" counter="200"
-                             :rules="descriptionRules" full-width height="10em" single-line>
-               </v-textarea>
+               <v-text-field name="fullName" label="表示ユーザー名" id="fullName"
+                             type="text" required v-model="fullName" counter="50"
+                             :rules="fullNameRules" full-width single-line>
+               </v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" :disabled="!valid" @click="submit">投稿</v-btn>
+            <v-btn color="primary" :disabled="!valid" @click="submit">設定</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -38,18 +38,18 @@
 export default {
   name: 'upload',
   data() {
-    const maxDescriptionLength = 200;
+    const maxFullNameLength = 50;
     return {
       valid: false,
       imageName: '',
-      imageUrl: '',
+      imageUrl: 'https://storage.googleapis.com/odakajournal.appspot.com/profiles/nomatan_tyoutyo.JPG',
       imageFile: '',
-      description: '',
-      descriptionRules: [
+      fullName: '',
+      fullNameRules: [
         v => v.length > 0,
         v =>
-          v.length <= maxDescriptionLength ||
-          `説明は最大 ${maxDescriptionLength} 文字まで入力可能です`
+          v.length <= maxFullNameLength||
+          `説明は最大 ${maxFullNameLength} 文字まで入力可能です`
       ]
     };
   },
@@ -78,13 +78,12 @@ export default {
     },
     submit() {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('upload', {
-          file: this.imageFile,
-          fileName: this.imageName,
-          description: this.description
-        }).then(() => {
-          this.$router.push({ path: '/timeline'});
-        });
+        // this.$store.dispatch('upload', {
+        //   file: this.imageFile,
+        //   fileName: this.imageName,
+        //   fullName: this.fullName
+        // });
+        this.$router.push({ path: '/timeline'});
       }
     }
   }

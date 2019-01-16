@@ -50,7 +50,7 @@ export default {
   watch: {
       getUser (auth) {
         if(!!auth){
-          this.$router.push({ path: '/about'});
+          this.$router.push({ path: '/about-edit'});
         }
       }
   },
@@ -66,7 +66,7 @@ export default {
             })
             .then(() => {
               if (this.user != null) {
-                this.$router.push({ path: '/about' });
+                this.$router.push({ path: '/about-edit' });
               }
             });
           })

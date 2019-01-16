@@ -48,6 +48,14 @@ const router = new Router({
       component: () => import('./views/Join.vue')
     },
     {
+      path: '/about-edit',
+      name: 'aboutEdit',
+      component: () => import('./views/AboutEdit.vue'),
+      meta: {
+        authRequired: true
+      }
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('./views/About.vue'),
