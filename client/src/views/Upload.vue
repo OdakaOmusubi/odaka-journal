@@ -8,16 +8,7 @@
           </v-toolbar>
           <v-card-text>
             <v-form ref="form" v-model="valid">
-                <v-img :src="imageUrl" height="150" v-if="imageUrl" align-center contain/>
-                <v-text-field label="写真を選ぶ" @click="pickFile" v-model="imageName" required prepend-icon="attach_file">
-                </v-text-field>
-                <input
-                    type="file"
-                    style="display: none"
-                    ref="image"
-                    accept="image/*"
-                    @change="onFilePicked"
-                >
+                <image-uploader v-on:childToParent="onChildClick"></image-uploader>
                <v-textarea name="description" label="説明を書く" id="description"
                              type="text" required v-model="description" counter="200"
                              :rules="descriptionRules" full-width height="10em" single-line>
@@ -35,13 +26,17 @@
 </template>
 
 <script>
+import ImageUploader from "@/components/ImageUploader.vue";
+
 export default {
   name: 'upload',
+  components: {
+      ImageUploader
+  },
   data() {
     const maxDescriptionLength = 200;
     return {
       valid: false,
-      imageName: '',
       imageUrl: '',
       imageFile: '',
       description: '',
@@ -54,28 +49,10 @@ export default {
     };
   },
   methods: {
-    pickFile() {
-      this.$refs.image.click();
-    },
-    onFilePicked(event) {
-      const files = event.target.files;
-      if (files[0] !== undefined) {
-        this.imageName = files[0].name;
-        if (this.imageName.lastIndexOf('.') <= 0) {
-          return;
-        }
-        const fr = new FileReader();
-        fr.readAsDataURL(files[0]);
-        fr.addEventListener('load', () => {
-          this.imageUrl = fr.result;
-          this.imageFile = files[0];
-        });
-      } else {
-        this.imageName = '';
-        this.imageFile = '';
-        this.imageUrl = '';
-      }
-    },
+      onChildClick(imageInfo) {
+          this.imageUrl = imageInfo.imageUrl;
+          this.imageFile = imageInfo.imageFile;
+      },
     submit() {
       if (this.$refs.form.validate()) {
         this.$store.dispatch('upload', {
