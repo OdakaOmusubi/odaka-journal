@@ -78,14 +78,15 @@ export default new Vuex.Store({
       });
     },
     async userLogin({}, { email, password }) {
-      Firebase.auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        router.push('/timeline');
-      })
-      .catch((error) => {
-        console.log(error);
-        router.push('/sign-in');
-      });
+      Firebase.auth
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          router.push('/timeline');
+        })
+        .catch(error => {
+          console.log(error);
+          router.push('/sign-in');
+        });
     },
     userJoin({}, { user, name, profileImageUrl }) {
       Firebase.firestore
@@ -103,7 +104,6 @@ export default new Vuex.Store({
         .catch(function(error) {
           console.error('Error adding document: ', error);
         });
-
     },
     userSignOut() {
       Firebase.auth

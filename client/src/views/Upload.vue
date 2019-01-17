@@ -26,12 +26,12 @@
 </template>
 
 <script>
-import ImageUploader from "@/components/ImageUploader.vue";
+import ImageUploader from '@/components/ImageUploader.vue';
 
 export default {
   name: 'upload',
   components: {
-      ImageUploader
+    ImageUploader
   },
   data() {
     const maxDescriptionLength = 200;
@@ -49,19 +49,21 @@ export default {
     };
   },
   methods: {
-      onChildClick(imageInfo) {
-          this.imageUrl = imageInfo.imageUrl;
-          this.imageFile = imageInfo.imageFile;
-      },
+    onChildClick(imageInfo) {
+      this.imageUrl = imageInfo.imageUrl;
+      this.imageFile = imageInfo.imageFile;
+    },
     submit() {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('upload', {
-          file: this.imageFile,
-          fileName: this.imageName,
-          description: this.description
-        }).then(() => {
-          this.$router.push({ path: '/timeline'});
-        });
+        this.$store
+          .dispatch('upload', {
+            file: this.imageFile,
+            fileName: this.imageName,
+            description: this.description
+          })
+          .then(() => {
+            this.$router.push({ path: '/timeline' });
+          });
       }
     }
   }

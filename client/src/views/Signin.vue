@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Signin',
@@ -50,19 +50,19 @@ export default {
     };
   },
   watch: {
-      getUser (auth) {
-        if(!!auth){
-          this.$router.push({ path: '/timeline'});
-        }
+    getUser(auth) {
+      if (auth) {
+        this.$router.push({ path: '/timeline' });
       }
+    }
   },
   methods: {
     async submit() {
       if (this.$refs.form.validate()) {
-          const auth = await this.$auth.login(this.email, this.password);
-          if (auth.user != null) {
-            this.$router.push({ path: '/timeline' });
-          }
+        const auth = await this.$auth.login(this.email, this.password);
+        if (auth.user != null) {
+          this.$router.push({ path: '/timeline' });
+        }
       }
     }
   }

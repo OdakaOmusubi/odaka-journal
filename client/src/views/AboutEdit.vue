@@ -43,13 +43,14 @@ export default {
     return {
       valid: false,
       imageName: '',
-      imageUrl: 'https://storage.googleapis.com/odakajournal.appspot.com/profiles/nomatan_tyoutyo.JPG',
+      imageUrl:
+        'https://storage.googleapis.com/odakajournal.appspot.com/profiles/nomatan_tyoutyo.JPG',
       imageFile: '',
       fullName: '',
       fullNameRules: [
         v => v.length > 0,
         v =>
-          v.length <= maxFullNameLength||
+          v.length <= maxFullNameLength ||
           `説明は最大 ${maxFullNameLength} 文字まで入力可能です`
       ]
     };
@@ -84,7 +85,7 @@ export default {
         //   fileName: this.imageName,
         //   fullName: this.fullName
         // });
-        this.$router.push({ path: '/timeline'});
+        this.$router.push({ path: '/timeline' });
       }
     }
   }
@@ -93,9 +94,9 @@ export default {
 
 <style scoped>
 .profile-image {
-    height: 5em;
-    width: 5em;
-    border-radius: 50%;
-    border: 1px solid #D3D3D3;
+  height: 5em;
+  width: 5em;
+  border-radius: 50%;
+  border: 1px solid #d3d3d3;
 }
 </style>
