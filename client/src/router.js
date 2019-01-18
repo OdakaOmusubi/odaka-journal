@@ -50,11 +50,10 @@ const router = new Router({
     {
       path: '/about-edit',
       name: 'aboutEdit',
-      component: () => import('./views/AboutEdit.vue')
-      // TODO: fix later
-      // meta: {
-      //   authRequired: true
-      // }
+      component: () => import('./views/AboutEdit.vue'),
+      meta: {
+        authRequired: true
+      }
     },
     {
       path: '/about',

@@ -78,7 +78,7 @@ export default {
             this.$router.push({ path: '/about' });
           })
           .catch(error => {
-            throw new Exception(error);
+            throw new Error(error);
           });
       }
     }

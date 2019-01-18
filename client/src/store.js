@@ -55,7 +55,7 @@ export default new Vuex.Store({
       } else if (imageMimeType == 'image/png') {
         fileExtention = 'png';
       } else {
-        throw new Exception(`imageMimeType ${imageMimeType} is invalid.`);
+        throw new Error(`imageMimeType ${imageMimeType} is invalid.`);
       }
       let bucket;
       if (bucketType === 'posts') {
@@ -63,7 +63,7 @@ export default new Vuex.Store({
       } else if (bucket === 'profiles') {
         bucket = 'profiles';
       } else {
-        throw new Exception(`unknown bucket type: ${bucketType}`);
+        throw new Error(`unknown bucket type: ${bucketType}`);
       }
       const imageStorePath = `${bucket}/${hash}/image.${fileExtention}`;
       console.log(`try to upload file to ${imageStorePath}`);
@@ -120,7 +120,7 @@ export default new Vuex.Store({
           console.log('Document successfully written.');
         })
         .catch(function(error) {
-          throw new Exception('Error adding document: ', error);
+          throw new Error('Error adding document: ', error);
         });
     },
     async userLogin({}, { email, password }) {
@@ -135,7 +135,7 @@ export default new Vuex.Store({
         });
     },
     async userJoin({}, { user, name, profileImageUrl }) {
-      Firebase.firestore
+      return Firebase.firestore
         .collection('people')
         .doc(user.uid)
         .set({
