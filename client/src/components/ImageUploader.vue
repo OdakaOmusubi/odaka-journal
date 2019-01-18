@@ -2,7 +2,7 @@
     <v-container>
         <v-layout justify-center>
             <v-flex fluid>
-                <img v-bind:class="{ profile: isProfile, post: isPost }" v-show="!showCropper" :src="cropImg" alt="Cropped Image" />
+                <img :class="croppedImage" v-show="!showCropper" :src="cropImg" alt="Cropped Image" />
             </v-flex>
         </v-layout>
         <v-layout justify-center>
@@ -11,15 +11,17 @@
                 ref='cropper'
                 :guides="true"
                 :view-mode="2"
-                drag-mode="crop"
-                :auto-crop-area="0.5"
-                :min-container-width="250"
-                :min-container-height="180"
+                drag-mode="move"
+                :auto-crop="true"
+                :auto-crop-area="1.0"
+                :aspect-ratio="1.0"
+                :check-cross-origin="false"
                 :background="true"
                 :rotatable="true"
+                :scalable="true"
                 :src="imgSrc"
                 alt="Source Image"
-                :img-style="{ 'width': '400px', 'height': '300px' }">
+                :img-style="imageStyle">
             </vue-cropper>
             <input type="file" name="image" accept="image/*" ref="image"
                 style="display:none"
@@ -41,16 +43,44 @@ export default {
   components: {
       VueCropper
   },
-  props: ["isProfile", "isPost"],
+  props: ["isProfile", "isPost", "defaultImage"],
   data() {
     return {
         imgSrc: '',
         imageMimeType: '',
         cropImg: '',
-        showCropper: false
+        showCropper: false,
+        imageStyle: {}
     };
   },
+  computed: {
+      croppedImage: function() {
+          if (this.isProfile) {
+              console.log('isProfile', this.isProfile)
+              return 'profile'
+          } else if (this.isPost) {
+              console.log('isPost', this.isPost)
+              return 'post'
+          } else {
+              ''
+          }
+      }
+  },
+  mounted () {
+      if (this.isProfile) {
+        this.imageStyle = {}
+
+      } else if (this.isPost) {
+        this.imageStyle = {}
+      }
+      this.$refs.cropper.replace(this.defaultImage);
+  },
   watch: {
+      defaultImage: function(newVal, oldVal) {
+          console.log('defaultImage update')
+          this.imgSrc = newVal;
+          this.$refs.cropper.replace(newVal);
+      },
       cropImg: function (newVal, oldVal) {
           this.$emit('childToParent', { imageUrl: newVal, imageMimeType: this.imageMimeType });
       }
@@ -99,6 +129,10 @@ export default {
 </script>
 
 <style>
+img {
+    max-width: 100%;
+}
+
 .profile {
   height: 5em;
   width: 5em;

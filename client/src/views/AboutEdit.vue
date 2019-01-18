@@ -9,16 +9,9 @@
           <v-card-text>
             <v-form ref="form" v-model="valid">
                 <div class="subheading">プロフィール写真</div>
-                <v-img :src="imageUrl" class="profile-image" v-if="imageUrl" align-center justify-center contain/>
-                <v-text-field label="写真を選ぶ" @click="pickFile" v-model="imageName" required prepend-icon="attach_file">
-                </v-text-field>
-                <input
-                    type="file"
-                    style="display: none"
-                    ref="image"
-                    accept="image/*"
-                    @change="onFilePicked"
-                >
+                <image-uploader v-on:childToParent="updateCropImg" isProfile="true" isPost="false"
+                  defaultImage="https://firebasestorage.googleapis.com/v0/b/odakajournal.appspot.com/o/nomatan_tyoutyo.JPG?alt=media&token=57c559a4-1b5d-4e82-b7c7-c1d945fab7b7"
+                ></image-uploader>
                <v-text-field name="fullName" label="表示ユーザー名" id="fullName"
                              type="text" required v-model="fullName" counter="50"
                              :rules="fullNameRules" full-width single-line>
@@ -36,16 +29,20 @@
 </template>
 
 <script>
+import ImageUploader from '@/components/ImageUploader.vue';
+import { mapState } from 'vuex';
+
 export default {
-  name: 'upload',
+  name: 'AboutEdit',
+  components: {
+    ImageUploader
+  },
   data() {
     const maxFullNameLength = 50;
     return {
       valid: false,
-      imageName: '',
-      imageUrl:
-        'https://storage.googleapis.com/odakajournal.appspot.com/profiles/nomatan_tyoutyo.JPG',
-      imageFile: '',
+      imageUrl: '',
+      imageMimeType: '',
       fullName: '',
       fullNameRules: [
         v => v.length > 0,
@@ -55,37 +52,34 @@ export default {
       ]
     };
   },
+  computed: mapState(['user']),
   methods: {
-    pickFile() {
-      this.$refs.image.click();
-    },
-    onFilePicked(event) {
-      const files = event.target.files;
-      if (files[0] !== undefined) {
-        this.imageName = files[0].name;
-        if (this.imageName.lastIndexOf('.') <= 0) {
-          return;
-        }
-        const fr = new FileReader();
-        fr.readAsDataURL(files[0]);
-        fr.addEventListener('load', () => {
-          this.imageUrl = fr.result;
-          this.imageFile = files[0];
-        });
-      } else {
-        this.imageName = '';
-        this.imageFile = '';
-        this.imageUrl = '';
-      }
+    updateCropImg(childData) {
+        this.imageUrl = childData.imageUrl;
+        this.imageMimeType = childData.imageMimeType;
     },
     submit() {
       if (this.$refs.form.validate()) {
-        // this.$store.dispatch('upload', {
-        //   file: this.imageFile,
-        //   fileName: this.imageName,
-        //   fullName: this.fullName
-        // });
-        this.$router.push({ path: '/timeline' });
+        this.$store
+          .dispatch('uploadImage', {
+            type: 'profiles',
+            imageUrl: this.imageUrl,
+            imageMimeType: this.imageMimeType,
+            description: this.fullName
+          })
+          .then((downloadUrl) => {
+              return this.$store.dispatch('updatePeople', {
+                  uid: this.user.uid,
+                  fullName: this.fullName,
+                  profileImageUrl: downloadUrl
+              });
+          })
+          .then(() => {
+              this.$router.push({ path: '/about' });
+          })
+          .catch((error) => {
+              throw new Exception(error);
+          });
       }
     }
   }

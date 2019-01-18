@@ -8,7 +8,7 @@
           </v-toolbar>
           <v-card-text>
             <v-form ref="form" v-model="valid">
-                <image-uploader v-on:childToParent="updateCropImg" isProfile="false" isPost="true"></image-uploader>
+                <image-uploader v-on:childToParent="updateCropImg" :isProfile="false" :isPost="true"></image-uploader>
                <v-textarea name="description" label="説明を書く" id="description"
                              type="text" required v-model="description" counter="200"
                              :rules="descriptionRules" full-width height="10em" single-line>
@@ -27,6 +27,7 @@
 
 <script>
 import ImageUploader from '@/components/ImageUploader.vue';
+import { mapState } from 'vuex';
 
 export default {
   name: 'upload',
@@ -48,19 +49,29 @@ export default {
       ]
     };
   },
+  computed: mapState(['user']),
   methods: {
-      updateCropImg(childData) {
-          this.imageUrl = childData.imageUrl;
-          this.imageMimeType = childData.imageMimeType;
-      },
+    updateCropImg(childData) {
+        this.imageUrl = childData.imageUrl;
+        this.imageMimeType = childData.imageMimeType;
+    },
     submit() {
       if (this.$refs.form.validate()) {
         this.$store
-          .dispatch('upload', {
+          .dispatch('uploadImage', {
+            bucketType: 'posts',
             imageUrl: this.imageUrl,
             imageMimeType: this.imageMimeType,
             fileName: this.imageName,
             description: this.description
+          })
+          .then((imageDownloadUrl) => {
+              return this.$store.dispatch('storePost', {
+                  uid: this.user.uid,
+                  imageDownloadUrl: imageDownloadUrl,
+                  description: this.description,
+                  profileImageUrl: ''
+              })
           })
           .then(() => {
             this.$router.push({ path: '/timeline' });
