@@ -50,10 +50,11 @@ const router = new Router({
     {
       path: '/about-edit',
       name: 'aboutEdit',
-      component: () => import('./views/AboutEdit.vue'),
-      meta: {
-        authRequired: true
-      }
+      component: () => import('./views/AboutEdit.vue')
+      // TODO: fix later
+      // meta: {
+      //   authRequired: true
+      // }
     },
     {
       path: '/about',
@@ -67,19 +68,22 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.length === 0 || to.matched.some(record => record.path === '/')) {
+  if (
+    to.matched.length === 0 ||
+    to.matched.some(record => record.path === '/')
+  ) {
     // no matched access
     next({ path: '/sign-in' });
   }
   if (to.matched.some(record => record.meta.noAccessWithAuth)) {
     if (store.state.user) {
-      console.log('guard noaccess')
+      console.log('guard noaccess');
       router.go(-1);
     }
   }
   if (to.matched.some(record => record.meta.authRequired)) {
     if (!store.state.user) {
-      console.log('not auth. go to sign-in')
+      console.log('not auth. go to sign-in');
       next({ path: '/sign-in' });
     } else {
       next();

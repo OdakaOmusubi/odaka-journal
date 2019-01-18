@@ -8,16 +8,7 @@
           </v-toolbar>
           <v-card-text>
             <v-form ref="form" v-model="valid">
-                <v-img :src="imageUrl" height="150" v-if="imageUrl" align-center contain/>
-                <v-text-field label="写真を選ぶ" @click="pickFile" v-model="imageName" required prepend-icon="attach_file">
-                </v-text-field>
-                <input
-                    type="file"
-                    style="display: none"
-                    ref="image"
-                    accept="image/*"
-                    @change="onFilePicked"
-                >
+                <image-uploader v-on:childToParent="updateCropImg" :isProfile="false" :isPost="true"></image-uploader>
                <v-textarea name="description" label="説明を書く" id="description"
                              type="text" required v-model="description" counter="200"
                              :rules="descriptionRules" full-width height="10em" single-line>
@@ -35,15 +26,20 @@
 </template>
 
 <script>
+import ImageUploader from '@/components/ImageUploader.vue';
+import { mapState } from 'vuex';
+
 export default {
   name: 'upload',
+  components: {
+    ImageUploader
+  },
   data() {
     const maxDescriptionLength = 200;
     return {
       valid: false,
-      imageName: '',
       imageUrl: '',
-      imageFile: '',
+      imageMimeType: '',
       description: '',
       descriptionRules: [
         v => v.length > 0,
@@ -53,38 +49,33 @@ export default {
       ]
     };
   },
+  computed: mapState(['user']),
   methods: {
-    pickFile() {
-      this.$refs.image.click();
-    },
-    onFilePicked(event) {
-      const files = event.target.files;
-      if (files[0] !== undefined) {
-        this.imageName = files[0].name;
-        if (this.imageName.lastIndexOf('.') <= 0) {
-          return;
-        }
-        const fr = new FileReader();
-        fr.readAsDataURL(files[0]);
-        fr.addEventListener('load', () => {
-          this.imageUrl = fr.result;
-          this.imageFile = files[0];
-        });
-      } else {
-        this.imageName = '';
-        this.imageFile = '';
-        this.imageUrl = '';
-      }
+    updateCropImg(childData) {
+      this.imageUrl = childData.imageUrl;
+      this.imageMimeType = childData.imageMimeType;
     },
     submit() {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('upload', {
-          file: this.imageFile,
-          fileName: this.imageName,
-          description: this.description
-        }).then(() => {
-          this.$router.push({ path: '/timeline'});
-        });
+        this.$store
+          .dispatch('uploadImage', {
+            bucketType: 'posts',
+            imageUrl: this.imageUrl,
+            imageMimeType: this.imageMimeType,
+            fileName: this.imageName,
+            description: this.description
+          })
+          .then(imageDownloadUrl => {
+            return this.$store.dispatch('storePost', {
+              uid: this.user.uid,
+              imageDownloadUrl: imageDownloadUrl,
+              description: this.description,
+              profileImageUrl: ''
+            });
+          })
+          .then(() => {
+            this.$router.push({ path: '/timeline' });
+          });
       }
     }
   }

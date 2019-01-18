@@ -44,7 +44,7 @@ export default {
     this.$store.dispatch('fetchPosts');
   },
   beforeDestroy() {
-     console.log("timeline before destroy");
+    console.log('timeline before destroy');
     this.offPostsListener();
   },
   methods: {}

@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -20,18 +20,18 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
 const auth = firebase.auth();
 Vue.prototype.$auth = {
-    createUser: async (username, pass) => {
-        return auth.createUserWithEmailAndPassword(username, pass);
-    },
-    login: async (username, pass) => {
-        return await auth.signInWithEmailAndPassword(username, pass);
-    },
-    logout: async () => {
-        await auth.signOut();
-    }
-}
+  createUser: async (username, pass) => {
+    return auth.createUserWithEmailAndPassword(username, pass);
+  },
+  login: async (username, pass) => {
+    return await auth.signInWithEmailAndPassword(username, pass);
+  },
+  logout: async () => {
+    await auth.signOut();
+  }
+};
 auth.onAuthStateChanged(user => {
-    store.commit('updateUser', { user });
+  store.commit('updateUser', { user });
 });
 
 const storage = firebase.storage();
