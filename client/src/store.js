@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import router from '@/router';
+import firebase from 'firebase/app';
 import Firebase from './firebase/index.js';
 import md5 from 'md5';
 
@@ -44,14 +45,24 @@ export default new Vuex.Store({
         });
       commit('setOffPostsListener', unsubscribeFunc);
     },
-    upload({ state }, { file, fileName, description }) {
+    upload({ state }, { imageUrl, imageMimeType, description }) {
       const storageRef = Firebase.storage.ref();
       const uid = state.user.uid;
       const hash = md5(uid + Date.now().toString());
-      const [x, extention] = fileName.split('.');
-      const imageStorePath = `posts/${hash}/image.${extention}`;
+      let fileExtention = '';
+      if (imageMimeType == 'image/jpeg') {
+        fileExtention = 'jpg'
+      } else if (imageMimeType == 'image/png') {
+        fileExtention = 'png'
+      } else {
+        throw new Exception(`imageMimeType ${imageMimeType} is invalid.`);
+      }
+      const imageStorePath = `posts/${hash}/image.${fileExtention}`;
+      console.log(`try to upload file to ${imageStorePath}`);
       const fileRef = storageRef.child(imageStorePath);
-      fileRef.put(file).then(() => {
+      const metadata = { contentType: imageMimeType };
+      fileRef.putString(imageUrl, firebase.storage.StringFormat.DATA_URL, metadata).then((snapshot) => {
+        console.log(snapshot.ref.imageUrl);
         console.log('Uploaded a blob or file!');
         fileRef.getDownloadURL().then(downloadUrl => {
           Firebase.firestore

@@ -8,7 +8,7 @@
           </v-toolbar>
           <v-card-text>
             <v-form ref="form" v-model="valid">
-                <image-uploader v-on:childToParent="onChildClick"></image-uploader>
+                <image-uploader v-on:childToParent="updateCropImg" isProfile="false" isPost="true"></image-uploader>
                <v-textarea name="description" label="説明を書く" id="description"
                              type="text" required v-model="description" counter="200"
                              :rules="descriptionRules" full-width height="10em" single-line>
@@ -38,7 +38,7 @@ export default {
     return {
       valid: false,
       imageUrl: '',
-      imageFile: '',
+      imageMimeType: '',
       description: '',
       descriptionRules: [
         v => v.length > 0,
@@ -49,15 +49,16 @@ export default {
     };
   },
   methods: {
-    onChildClick(imageInfo) {
-      this.imageUrl = imageInfo.imageUrl;
-      this.imageFile = imageInfo.imageFile;
-    },
+      updateCropImg(childData) {
+          this.imageUrl = childData.imageUrl;
+          this.imageMimeType = childData.imageMimeType;
+      },
     submit() {
       if (this.$refs.form.validate()) {
         this.$store
           .dispatch('upload', {
-            file: this.imageFile,
+            imageUrl: this.imageUrl,
+            imageMimeType: this.imageMimeType,
             fileName: this.imageName,
             description: this.description
           })
