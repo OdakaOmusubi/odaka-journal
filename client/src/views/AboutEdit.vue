@@ -55,8 +55,8 @@ export default {
   computed: mapState(['user']),
   methods: {
     updateCropImg(childData) {
-        this.imageUrl = childData.imageUrl;
-        this.imageMimeType = childData.imageMimeType;
+      this.imageUrl = childData.imageUrl;
+      this.imageMimeType = childData.imageMimeType;
     },
     submit() {
       if (this.$refs.form.validate()) {
@@ -67,18 +67,18 @@ export default {
             imageMimeType: this.imageMimeType,
             description: this.fullName
           })
-          .then((downloadUrl) => {
-              return this.$store.dispatch('updatePeople', {
-                  uid: this.user.uid,
-                  fullName: this.fullName,
-                  profileImageUrl: downloadUrl
-              });
+          .then(downloadUrl => {
+            return this.$store.dispatch('updatePeople', {
+              uid: this.user.uid,
+              fullName: this.fullName,
+              profileImageUrl: downloadUrl
+            });
           })
           .then(() => {
-              this.$router.push({ path: '/about' });
+            this.$router.push({ path: '/about' });
           })
-          .catch((error) => {
-              throw new Exception(error);
+          .catch(error => {
+            throw new Exception(error);
           });
       }
     }

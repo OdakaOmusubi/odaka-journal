@@ -51,9 +51,9 @@ export default new Vuex.Store({
       const hash = md5(uid + Date.now().toString());
       let fileExtention = '';
       if (imageMimeType == 'image/jpeg') {
-        fileExtention = 'jpg'
+        fileExtention = 'jpg';
       } else if (imageMimeType == 'image/png') {
-        fileExtention = 'png'
+        fileExtention = 'png';
       } else {
         throw new Exception(`imageMimeType ${imageMimeType} is invalid.`);
       }
@@ -63,24 +63,29 @@ export default new Vuex.Store({
       } else if (bucket === 'profiles') {
         bucket = 'profiles';
       } else {
-        throw new Exception(`unknown bucket type: ${bucketType}`)
+        throw new Exception(`unknown bucket type: ${bucketType}`);
       }
       const imageStorePath = `${bucket}/${hash}/image.${fileExtention}`;
       console.log(`try to upload file to ${imageStorePath}`);
       const fileRef = storageRef.child(imageStorePath);
       const metadata = { contentType: imageMimeType };
-      const downloadUrl = await fileRef.putString(imageUrl, firebase.storage.StringFormat.DATA_URL, metadata).then((snapshot) => {
-        console.log(snapshot.ref.imageUrl);
-        console.log('Uploaded a blob or file!');
-        return fileRef.getDownloadURL().then(downloadUrl => {
-          return downloadUrl;
+      const downloadUrl = await fileRef
+        .putString(imageUrl, firebase.storage.StringFormat.DATA_URL, metadata)
+        .then(snapshot => {
+          console.log(snapshot.ref.imageUrl);
+          console.log('Uploaded a blob or file!');
+          return fileRef.getDownloadURL().then(downloadUrl => {
+            return downloadUrl;
+          });
         });
-      });
       console.log(`downloadUrl is ${downloadUrl}`);
 
       return downloadUrl;
     },
-    async storePost({}, { uid, imageDownloadUrl, description, profileImageUrl }) {
+    async storePost(
+      {},
+      { uid, imageDownloadUrl, description, profileImageUrl }
+    ) {
       Firebase.firestore
         .collection('posts')
         .add({

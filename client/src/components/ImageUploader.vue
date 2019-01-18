@@ -41,49 +41,51 @@ import VueCropper from 'vue-cropperjs';
 export default {
   name: 'ImageUploader',
   components: {
-      VueCropper
+    VueCropper
   },
-  props: ["isProfile", "isPost", "defaultImage"],
+  props: ['isProfile', 'isPost', 'defaultImage'],
   data() {
     return {
-        imgSrc: '',
-        imageMimeType: '',
-        cropImg: '',
-        showCropper: false,
-        imageStyle: {}
+      imgSrc: '',
+      imageMimeType: '',
+      cropImg: '',
+      showCropper: false,
+      imageStyle: {}
     };
   },
   computed: {
-      croppedImage: function() {
-          if (this.isProfile) {
-              console.log('isProfile', this.isProfile)
-              return 'profile'
-          } else if (this.isPost) {
-              console.log('isPost', this.isPost)
-              return 'post'
-          } else {
-              ''
-          }
-      }
-  },
-  mounted () {
+    croppedImage: function() {
       if (this.isProfile) {
-        this.imageStyle = {}
-
+        console.log('isProfile', this.isProfile);
+        return 'profile';
       } else if (this.isPost) {
-        this.imageStyle = {}
+        console.log('isPost', this.isPost);
+        return 'post';
+      } else {
+        ('');
       }
-      this.$refs.cropper.replace(this.defaultImage);
+    }
+  },
+  mounted() {
+    if (this.isProfile) {
+      this.imageStyle = {};
+    } else if (this.isPost) {
+      this.imageStyle = {};
+    }
+    this.$refs.cropper.replace(this.defaultImage);
   },
   watch: {
-      defaultImage: function(newVal, oldVal) {
-          console.log('defaultImage update')
-          this.imgSrc = newVal;
-          this.$refs.cropper.replace(newVal);
-      },
-      cropImg: function (newVal, oldVal) {
-          this.$emit('childToParent', { imageUrl: newVal, imageMimeType: this.imageMimeType });
-      }
+    defaultImage: function(newVal, oldVal) {
+      console.log('defaultImage update');
+      this.imgSrc = newVal;
+      this.$refs.cropper.replace(newVal);
+    },
+    cropImg: function(newVal, oldVal) {
+      this.$emit('childToParent', {
+        imageUrl: newVal,
+        imageMimeType: this.imageMimeType
+      });
+    }
   },
   // mounted() {
   //   this.$refs.croppieRef.bind({
@@ -95,8 +97,8 @@ export default {
       this.$refs.image.click();
     },
     editFile() {
-        console.log('editFile')
-        this.showCropper = true;
+      console.log('editFile');
+      this.showCropper = true;
     },
     setImage(e) {
       const file = e.target.files[0];
@@ -106,7 +108,7 @@ export default {
       }
       if (typeof FileReader === 'function') {
         const reader = new FileReader();
-        reader.onload = (event) => {
+        reader.onload = event => {
           this.imageMimeType = file.type;
           this.imgSrc = event.target.result;
           this.cropImg = event.target.result;
@@ -119,7 +121,7 @@ export default {
       }
     },
     cropImage() {
-        console.log('cropImage')
+      console.log('cropImage');
       // get image data for post processing, e.g. upload or setting image src
       this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
       this.showCropper = false;
@@ -130,7 +132,7 @@ export default {
 
 <style>
 img {
-    max-width: 100%;
+  max-width: 100%;
 }
 
 .profile {
