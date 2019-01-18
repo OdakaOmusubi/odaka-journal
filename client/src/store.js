@@ -60,7 +60,7 @@ export default new Vuex.Store({
       let bucket;
       if (bucketType === 'posts') {
         bucket = 'posts';
-      } else if (bucket === 'profiles') {
+      } else if (bucketType === 'profiles') {
         bucket = 'profiles';
       } else {
         throw new Error(`unknown bucket type: ${bucketType}`);

@@ -62,10 +62,9 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store
           .dispatch('uploadImage', {
-            type: 'profiles',
+            bucketType: 'profiles',
             imageUrl: this.imageUrl,
-            imageMimeType: this.imageMimeType,
-            description: this.fullName
+            imageMimeType: this.imageMimeType
           })
           .then(downloadUrl => {
             return this.$store.dispatch('updatePeople', {
