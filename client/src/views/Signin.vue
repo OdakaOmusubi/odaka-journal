@@ -61,7 +61,14 @@ export default {
       if (this.$refs.form.validate()) {
         const auth = await this.$auth.login(this.email, this.password);
         if (auth.user != null) {
-          this.$router.push({ path: '/timeline' });
+          this.$store
+          .dispatch('fetchPeople', { uid: auth.user.uid })
+          .then(() => {
+            this.$router.push({ path: '/timeline' });
+          })
+          .catch((e) => {
+            throw new Error(e);
+          });
         }
       }
     }

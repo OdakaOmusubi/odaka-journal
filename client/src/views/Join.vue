@@ -68,6 +68,11 @@ export default {
               })
               .then(() => {
                 if (this.user != null) {
+                  return this.$store.dispatch('fetchPeople', { uid: this.user.uid });
+                }
+              })
+              .then(() => {
+                if (this.user != null) {
                   this.$router.push({ path: '/about-edit' });
                 }
               });
