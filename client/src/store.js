@@ -10,17 +10,24 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: null,
+    people: null,
     posts: [],
     offPostsListener: null
   },
   getters: {
     getUser(state) {
       return state.user;
+    },
+    getPeople(state) {
+      return state.people
     }
   },
   mutations: {
     updateUser(state, { user }) {
       Vue.set(state, 'user', user);
+    },
+    setPeople(state, people) {
+      Vue.set(state, 'people', people);
     },
     setPosts(state, payload) {
       state.posts = payload;
@@ -84,18 +91,19 @@ export default new Vuex.Store({
     },
     async storePost(
       {},
-      { uid, imageDownloadUrl, description, profileImageUrl }
+      { uid, imageDownloadUrl, description, profileImageUrl, fullName }
     ) {
       Firebase.firestore
         .collection('posts')
         .add({
           author: {
             peopleRef: `people/${uid}`,
+            profileImageUrl: profileImageUrl,
+            fullName: fullName,
             uid: uid
           },
           imageUrl: imageDownloadUrl,
           text: description,
-          profileImageUrl: profileImageUrl,
           title: '',
           createdAt: Date.now() / 1000,
           updatedAt: Date.now() / 1000
@@ -151,10 +159,24 @@ export default new Vuex.Store({
           console.error('Error adding document: ', error);
         });
     },
-    userSignOut() {
+    async fetchPeople({ commit }, { uid }) {
+      Firebase.firestore
+      .collection('people')
+      .doc(uid)
+      .get()
+      .then( doc => {
+        console.log(`fetch people. data:${doc.data()}`);
+        commit('setPeople', doc.data());
+      })
+      .catch((e) => {
+        throw new Error(e);
+      });
+    },
+    userSignOut({ commit }) {
       Firebase.auth
         .signOut()
         .then(() => {
+          commit('setPeople', null);
           router.push('/sign-in');
         })
         .catch(() => {
