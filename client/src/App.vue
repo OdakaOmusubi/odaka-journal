@@ -1,9 +1,8 @@
 <template>
   <v-app>
-    
+    <app-navigation></app-navigation>
 
     <v-content transition="slide-x-transition">
-      <app-navigation></app-navigation>
       <router-view></router-view>
     </v-content>
   </v-app>
@@ -25,6 +24,11 @@ export default {
 };
 </script>
 <style>
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 .application--wrap {
   background: url('https://storage.googleapis.com/odakajournal.appspot.com/splash_comp.jpg');
   background-size: cover;
