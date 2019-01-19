@@ -91,18 +91,19 @@ export default new Vuex.Store({
     },
     async storePost(
       {},
-      { uid, imageDownloadUrl, description, profileImageUrl }
+      { uid, imageDownloadUrl, description, profileImageUrl, fullName }
     ) {
       Firebase.firestore
         .collection('posts')
         .add({
           author: {
             peopleRef: `people/${uid}`,
+            profileImageUrl: profileImageUrl,
+            fullName: fullName,
             uid: uid
           },
           imageUrl: imageDownloadUrl,
           text: description,
-          profileImageUrl: profileImageUrl,
           title: '',
           createdAt: Date.now() / 1000,
           updatedAt: Date.now() / 1000
