@@ -14,7 +14,7 @@
         </template>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar app color="brown darken-4" dark>
+    <v-toolbar app color="transparent" dark floating fixed flat>
       <v-toolbar-side-icon class="hidden-md-and-up" @click="drawer = !drawer"></v-toolbar-side-icon>
       <v-spacer class="hidden-md-and-up"></v-spacer>
       <router-link to="/timeline">
