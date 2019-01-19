@@ -4,7 +4,7 @@
     <v-layout row wrap class="content" align-center>
       <v-flex xs12 lg7 class="pa-5">
         <v-responsive :aspect-ratio="1/1" app>
-          <v-carousel fluid height="600px" hide-delimiters>
+          <v-carousel fluid height="auto" hide-delimiters>
             <v-carousel-item v-for="(item,i) in posts" :key="i" :src="item.imageUrl">
   
               <v-bottom-nav :value="true" absolute color="rgba(0,0,0,.7)">
