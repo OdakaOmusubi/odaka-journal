@@ -1,11 +1,25 @@
 
 <template>
   <v-container fluid fill-height class="pa-0 timeline-bg">
-    <v-layout row wrap class="content">
-      <v-flex xs12 lg7>
-        <v-carousel fluid height="auto" hide-controls hide-delimiters app>
-          <v-carousel-item v-for="(item,i) in posts" :key="i" :src="item.imageUrl"></v-carousel-item>
-        </v-carousel>
+    <v-layout row wrap class="content" align-center>
+      <v-flex xs12 lg7 class="pa-5">
+        <v-responsive :aspect-ratio="1/1" app>
+          <v-carousel fluid height="auto" hide-delimiters>
+            <v-carousel-item v-for="(item,i) in posts" :key="i" :src="item.imageUrl">
+  
+              <v-bottom-nav :value="true" absolute color="rgba(0,0,0,.7)">
+                <p class="white--text">
+                  <v-avatar size="56" color="grey lighten-4" absolute top left>
+                  <img :src="item.author.profileImageUrl" alt="">
+                </v-avatar>
+                <span class="display-1"> {{item.author.fullName}}</span>
+                <span> {{item.text}}</span>
+                </p>
+              </v-bottom-nav>
+            </v-carousel-item>
+          </v-carousel>
+        </v-responsive>
+  
       </v-flex>
       <v-flex xs12 lg5>
         <v-container fill-height class="hidden-sm-and-down">
@@ -19,7 +33,7 @@
               </v-btn>
             </v-flex>
           </v-layout>
-          
+  
         </v-container>
         <v-footer class="hidden-md-and-up" fixed color="transparent">
           <!-- smartphone -->
