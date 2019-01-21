@@ -6,7 +6,7 @@ import router from './router';
 import store from './store';
 import '@/firebase/';
 // TODO at dev, currently PWA is disabled.
-// import './registerServiceWorker'
+import './registerServiceWorker'
 
 Vue.config.productionTip = false;
 
