@@ -4,7 +4,6 @@ import router from '@/router';
 import firebase from 'firebase/app';
 import Firebase from './firebase/index.js';
 import md5 from 'md5';
-import moment from 'moment-timezone';
 
 Vue.use(Vuex);
 
@@ -35,6 +34,7 @@ export default new Vuex.Store({
       state.posts = payload;
     },
     updateCurrentDateJST(state) {
+      // use vue prototype moment, which initialized in main.js
       state.currentDateJST = moment().tz('Asia/Tokyo');
     },
     setOffPostsListener(state, payload) {
