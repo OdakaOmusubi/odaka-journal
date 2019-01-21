@@ -20,6 +20,9 @@ export default {
     return {
       //
     };
+  },
+  created() {
+    this.$store.dispatch('startSchedules');
   }
 };
 </script>
