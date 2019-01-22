@@ -12,6 +12,7 @@ export default new Vuex.Store({
     user: null,
     people: null,
     posts: [],
+    currentDateJST: moment().tz('Asia/Tokyo'),
     offPostsListener: null
   },
   getters: {
@@ -32,11 +33,20 @@ export default new Vuex.Store({
     setPosts(state, payload) {
       state.posts = payload;
     },
+    updateCurrentDateJST(state) {
+      // use vue prototype moment, which initialized in main.js
+      state.currentDateJST = moment().tz('Asia/Tokyo');
+    },
     setOffPostsListener(state, payload) {
       state.offPostsListener = payload;
     }
   },
   actions: {
+    startSchedules({ commit }) {
+      setInterval(() => {
+        commit('updateCurrentDateJST')
+      }, 1000 * 10); // update every 10 sec.
+    },
     fetchPosts({ commit }) {
       console.log('store fetchPosts');
       const sevenDaysPeriodSec = 60 * 60 * 24 * 7;
