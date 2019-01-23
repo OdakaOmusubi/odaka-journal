@@ -5,7 +5,7 @@
       <v-flex xs12 lg7 class="pa-5">
         <v-responsive :aspect-ratio="1/1" app>
           <v-carousel fluid height="auto" hide-delimiters>
-            <v-carousel-item v-for="(item,i) in posts" :key="i" :src="item.imageUrl">
+            <v-carousel-item v-for="(item,i) in posts" :key="i" :src="item.imageUrl" class="carouselItems">
   
               <v-bottom-nav :value="true" absolute color="rgba(0,0,0,.7)">
                 <p class="white--text">
@@ -85,6 +85,17 @@
   };
 </script>
 
-<style scoped>
-  
+<style>
+  .carouselItems::before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
+  .v-responsive.v-carousel__item {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
 </style>
