@@ -74,6 +74,9 @@
       // console.log('timeline created');
       this.$store.dispatch('fetchPosts');
     },
+    mounted() {
+      document.title = "タイムライン - " + document.title ;
+    },
     beforeDestroy() {
       // console.log('timeline before destroy');
       this.offPostsListener();
