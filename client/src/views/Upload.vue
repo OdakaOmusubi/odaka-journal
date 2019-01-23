@@ -16,6 +16,9 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
+            <v-btn color="primary" to="/timeline">
+              キャンセル
+            </v-btn>
             <v-spacer></v-spacer>
             <v-btn color="primary" :disabled="!valid" @click="submit">投稿</v-btn>
           </v-card-actions>
