@@ -16,7 +16,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" to="/timeline">
+            <v-btn color="primary" outline to="/timeline">
               キャンセル
             </v-btn>
             <v-spacer></v-spacer>

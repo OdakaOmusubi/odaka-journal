@@ -48,59 +48,57 @@
 </template>
 
 <script>
-  import {
-    mapState
-  } from 'vuex';
-  
-  export default {
-    name: 'timeline',
-    data() {
-      return {
-        // items: [
-        //   {
-        //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
-        //   },
-        //   {
-        //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
-        //   },
-        //   {
-        //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
-        //   }
-        // ]
-      };
-    },
-    computed: mapState(['posts', 'offPostsListener']),
-    created() {
-      // console.log('timeline created');
-      this.$store.dispatch('fetchPosts');
-    },
-    mounted() {
-      document.title = "タイムライン - " + document.title;
-    },
-    beforeDestroy() {
-      // console.log('timeline before destroy');
-      this.offPostsListener();
-    },
-    methods: {}
-  };
+import { mapState } from 'vuex';
+
+export default {
+  name: 'timeline',
+  data() {
+    return {
+      // items: [
+      //   {
+      //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
+      //   },
+      //   {
+      //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
+      //   },
+      //   {
+      //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
+      //   }
+      // ]
+    };
+  },
+  computed: mapState(['posts', 'offPostsListener']),
+  created() {
+    // console.log('timeline created');
+    this.$store.dispatch('fetchPosts');
+  },
+  mounted() {
+    document.title = 'タイムライン - ' + document.title;
+  },
+  beforeDestroy() {
+    // console.log('timeline before destroy');
+    this.offPostsListener();
+  },
+  methods: {}
+};
 </script>
 
 <style>
-  .carouselItems::before {
-    content: "";
-    display: block;
-    padding-top: 100%;
-  }
-  
-  .v-responsive.v-carousel__item {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-  }
-  .carousel-author {
-    top : -16px;
-    left: 8px;
-  }
+.carouselItems::before {
+  content: '';
+  display: block;
+  padding-top: 100%;
+}
+
+.v-responsive.v-carousel__item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+.carousel-author {
+  top: -16px;
+  left: 8px;
+}
 </style>
