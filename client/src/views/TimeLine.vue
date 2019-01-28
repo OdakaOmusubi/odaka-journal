@@ -26,8 +26,8 @@
           <!-- pc,tablet -->
           <v-layout align-center>
             <v-flex class="text-md-center">
-              <p class="display-2 white--text">2019.1.19 (Sat.)</p>
-              <p class="display-4 white--text">10:00</p>
+              <p class="display-2 white--text">{{ currentDateJST.format("YYYY.MM.DD (ddd)")}}</p>
+              <p class="display-4 white--text">{{ currentDateJST.format("HH:mm")}}</p>
               <v-btn dark fab large color="pink" to="/upload">
                 <v-icon>add</v-icon>
               </v-btn>
@@ -81,6 +81,7 @@ export default {
   },
   methods: {}
 };
+
 </script>
 
 <style>

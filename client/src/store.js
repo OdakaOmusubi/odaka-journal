@@ -4,32 +4,56 @@ import router from '@/router';
 import firebase from 'firebase/app';
 import Firebase from './firebase/index.js';
 import md5 from 'md5';
+import moment from 'moment-timezone';
 
 Vue.use(Vuex);
+
+// init momentjs
+moment.lang('ja', {
+  weekdays: ["日曜日","月曜日","火曜日","水曜日","木曜日","金曜日","土曜日"],
+  weekdaysShort: ["日","月","火","水","木","金","土"],
+});
 
 export default new Vuex.Store({
   state: {
     user: null,
+    people: null,
     posts: [],
+    currentDateJST: moment().tz('Asia/Tokyo'),
     offPostsListener: null
   },
   getters: {
     getUser(state) {
       return state.user;
+    },
+    getPeople(state) {
+      return state.people
     }
   },
   mutations: {
     updateUser(state, { user }) {
       Vue.set(state, 'user', user);
     },
+    setPeople(state, people) {
+      Vue.set(state, 'people', people);
+    },
     setPosts(state, payload) {
       state.posts = payload;
+    },
+    updateCurrentDateJST(state) {
+      // use vue prototype moment, which initialized in main.js
+      state.currentDateJST = moment().tz('Asia/Tokyo');
     },
     setOffPostsListener(state, payload) {
       state.offPostsListener = payload;
     }
   },
   actions: {
+    startSchedules({ commit }) {
+      setInterval(() => {
+        commit('updateCurrentDateJST')
+      }, 1000 * 10); // update every 10 sec.
+    },
     fetchPosts({ commit }) {
       console.log('store fetchPosts');
       const sevenDaysPeriodSec = 60 * 60 * 24 * 7;
@@ -84,18 +108,19 @@ export default new Vuex.Store({
     },
     async storePost(
       {},
-      { uid, imageDownloadUrl, description, profileImageUrl }
+      { uid, imageDownloadUrl, description, profileImageUrl, fullName }
     ) {
       Firebase.firestore
         .collection('posts')
         .add({
           author: {
             peopleRef: `people/${uid}`,
+            profileImageUrl: profileImageUrl,
+            fullName: fullName,
             uid: uid
           },
           imageUrl: imageDownloadUrl,
           text: description,
-          profileImageUrl: profileImageUrl,
           title: '',
           createdAt: Date.now() / 1000,
           updatedAt: Date.now() / 1000
@@ -151,10 +176,24 @@ export default new Vuex.Store({
           console.error('Error adding document: ', error);
         });
     },
-    userSignOut() {
+    async fetchPeople({ commit }, { uid }) {
+      Firebase.firestore
+      .collection('people')
+      .doc(uid)
+      .get()
+      .then( doc => {
+        console.log(`fetch people. data:${doc.data()}`);
+        commit('setPeople', doc.data());
+      })
+      .catch((e) => {
+        throw new Error(e);
+      });
+    },
+    userSignOut({ commit }) {
       Firebase.auth
         .signOut()
         .then(() => {
+          commit('setPeople', null);
           router.push('/sign-in');
         })
         .catch(() => {

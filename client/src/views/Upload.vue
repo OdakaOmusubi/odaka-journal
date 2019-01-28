@@ -52,7 +52,7 @@ export default {
       ]
     };
   },
-  computed: mapState(['user']),
+  computed: mapState(['user', 'people']),
   methods: {
     updateCropImg(childData) {
       this.imageUrl = childData.imageUrl;
@@ -73,7 +73,8 @@ export default {
               uid: this.user.uid,
               imageDownloadUrl: imageDownloadUrl,
               description: this.description,
-              profileImageUrl: ''
+              profileImageUrl: this.people.profileImageUrl,
+              fullName: this.people.fullName
             });
           })
           .then(() => {
