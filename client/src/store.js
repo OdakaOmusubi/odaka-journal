@@ -182,7 +182,6 @@ export default new Vuex.Store({
       .doc(uid)
       .get()
       .then( doc => {
-        console.log(`fetch people. data:${doc.data()}`);
         commit('setPeople', doc.data());
       })
       .catch((e) => {
