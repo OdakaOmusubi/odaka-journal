@@ -32,6 +32,9 @@ Vue.prototype.$auth = {
 };
 auth.onAuthStateChanged(user => {
   store.commit('updateUser', { user });
+  if (user != undefined && user.uid != null) {
+    store.dispatch('fetchPeople', { uid : user.uid});
+  }
 });
 
 const storage = firebase.storage();
