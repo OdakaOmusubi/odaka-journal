@@ -26,8 +26,8 @@
           <!-- pc,tablet -->
           <v-layout align-center>
             <v-flex class="text-md-center">
-              <p class="display-2 white--text">{{ currentDateJST.format("YYYY.MM.DD (ddd)")}}</p>
-              <p class="display-4 white--text">{{ currentDateJST.format("HH:mm")}}</p>
+              <p class="display-2 white--text">{{ this.currentDateJST.format("YYYY.MM.DD (ddd)")}}</p>
+              <p class="display-4 white--text">{{ this.currentDateJST.format("HH:mm")}}</p>
               <v-btn dark fab large color="pink" to="/upload">
                 <v-icon>add</v-icon>
               </v-btn>
@@ -67,7 +67,7 @@ export default {
       // ]
     };
   },
-  computed: mapState(['posts', 'offPostsListener']),
+  computed: mapState(['posts', 'offPostsListener', 'currentDateJST']),
   created() {
     // console.log('timeline created');
     this.$store.dispatch('fetchPosts');
