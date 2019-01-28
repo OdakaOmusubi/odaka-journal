@@ -27,7 +27,8 @@ export default {
 };
 </script>
 <style>
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -43,7 +44,7 @@ html, body {
   position: relative;
   z-index: ;
 }
-.application--wrap:before{
+.application--wrap:before {
   content: '';
   background: inherit;
   -webkit-filter: blur(5px);
@@ -58,9 +59,9 @@ html, body {
   bottom: -5px;
   z-index: -2;
 }
-.application--wrap:after{
+.application--wrap:after {
   content: '';
-  background: rgba(0, 0, 0, .5);
+  background: rgba(0, 0, 0, 0.5);
   position: absolute;
   top: 0;
   left: 0;

@@ -4,17 +4,17 @@
     <v-layout row wrap class="content" align-center>
       <v-flex xs12 lg7 class="pa-5">
         <v-responsive :aspect-ratio="1/1" app>
-          <v-carousel fluid height="auto" hide-delimiters>
-            <v-carousel-item v-for="(item,i) in posts" :key="i" :src="item.imageUrl">
+          <v-carousel fluid height="auto" hide-delimiters interval="10000">
+            <v-carousel-item v-for="(item,i) in posts" :key="i" :src="item.imageUrl" class="carouselItems">
   
               <v-bottom-nav :value="true" absolute color="rgba(0,0,0,.7)">
-                <p class="white--text">
-                  <v-avatar size="56" color="grey lighten-4" absolute top left>
-                  <img :src="item.author.profileImageUrl" alt="">
-                </v-avatar>
-                <span class="display-1"> {{item.author.fullName}}</span>
-                <span> {{item.text}}</span>
-                </p>
+                <div class="white--text pt-2">
+                  <v-avatar class="carousel-author" size="56" color="grey lighten-4" absolute top left>
+                    <img :src="item.author.profileImageUrl" alt="">
+                  </v-avatar>
+                  <span class="display-1"> {{item.author.fullName}}</span>
+                  <span> {{item.text}}</span>
+                </div>
               </v-bottom-nav>
             </v-carousel-item>
           </v-carousel>
@@ -48,40 +48,58 @@
 </template>
 
 <script>
-  import {
-    mapState
-  } from 'vuex';
-  
-  export default {
-    name: 'timeline',
-    data() {
-      return {
-        // items: [
-        //   {
-        //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
-        //   },
-        //   {
-        //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
-        //   },
-        //   {
-        //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
-        //   }
-        // ]
-      };
-    },
-    computed: mapState(['posts', 'offPostsListener', 'currentDateJST']),
-    created() {
-      console.log('timeline created');
-      this.$store.dispatch('fetchPosts');
-    },
-    beforeDestroy() {
-      console.log('timeline before destroy');
-      this.offPostsListener();
-    },
-    methods: {}
-  };
+import { mapState } from 'vuex';
+
+export default {
+  name: 'timeline',
+  data() {
+    return {
+      // items: [
+      //   {
+      //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
+      //   },
+      //   {
+      //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
+      //   },
+      //   {
+      //     image_url: 'https://dummyimage.com/600x400/616161/ffffff'
+      //   }
+      // ]
+    };
+  },
+  computed: mapState(['posts', 'offPostsListener']),
+  created() {
+    // console.log('timeline created');
+    this.$store.dispatch('fetchPosts');
+  },
+  mounted() {
+    document.title = 'タイムライン - ' + document.title;
+  },
+  beforeDestroy() {
+    // console.log('timeline before destroy');
+    this.offPostsListener();
+  },
+  methods: {}
+};
+
 </script>
 
-<style scoped>
-  
+<style>
+.carouselItems::before {
+  content: '';
+  display: block;
+  padding-top: 100%;
+}
+
+.v-responsive.v-carousel__item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+.carousel-author {
+  top: -16px;
+  left: 8px;
+}
 </style>
