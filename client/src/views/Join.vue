@@ -72,6 +72,15 @@ export default {
                 }
               })
               .then(() => {
+                // register user to analytics via mixin
+                if (this.user != null) {
+                  console.log('call mixpanel identify.');
+                  this.$mam.identify({uid: this.user.uid, isNewUser: true});
+                  this.$mam.setPeopleProperty({'$created': new Date()});
+                }
+                return;
+              })
+              .then(() => {
                 if (this.user != null) {
                   this.$router.push({ path: '/about-edit' });
                 }
