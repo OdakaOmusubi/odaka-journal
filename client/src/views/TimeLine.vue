@@ -2,7 +2,7 @@
 <template>
   <v-container fluid fill-height class="pa-0 timeline-bg">
     <v-layout row wrap class="content" align-center>
-      <v-flex xs12 lg7 class="pa-5">
+      <v-flex xs12 sm7 class="pa-5">
         <v-responsive :aspect-ratio="1/1" app>
           <v-carousel fluid height="auto" hide-delimiters interval="10000">
             <v-carousel-item v-for="(item,i) in posts" :key="i" :src="item.imageUrl" class="carouselItems">
@@ -21,7 +21,7 @@
         </v-responsive>
   
       </v-flex>
-      <v-flex xs12 lg5>
+      <v-flex xs12 sm5>
         <v-container fill-height class="hidden-sm-and-down">
           <!-- pc,tablet -->
           <v-layout align-center>
