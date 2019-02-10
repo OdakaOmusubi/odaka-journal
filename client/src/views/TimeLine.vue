@@ -6,7 +6,6 @@
         <v-responsive :aspect-ratio="1/1" app>
           <v-carousel fluid height="auto" hide-delimiters interval="10000">
             <v-carousel-item v-for="(item,i) in posts" :key="i" :src="item.imageUrl" class="carouselItems">
-  
               <v-bottom-nav :value="true" absolute color="rgba(0,0,0,.7)">
                 <div class="white--text pt-2">
                   <v-avatar class="carousel-author" size="56" color="grey lighten-4" absolute top left>

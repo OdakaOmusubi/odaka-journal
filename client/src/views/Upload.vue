@@ -20,6 +20,7 @@
               キャンセル
             </v-btn>
             <v-spacer></v-spacer>
+            <v-progress-circular v-show="inProgress" indeterminate color="grey" class="mr-2"></v-progress-circular>
             <v-btn color="primary" :disabled="!valid" @click="submit">投稿</v-btn>
           </v-card-actions>
         </v-card>
@@ -44,6 +45,7 @@ export default {
       imageUrl: '',
       imageMimeType: '',
       description: '',
+      inProgress: false,
       descriptionRules: [
         v => v.length > 0,
         v =>
@@ -60,6 +62,9 @@ export default {
     },
     submit() {
       if (this.$refs.form.validate()) {
+        // start progress circle.
+        this.inProgress = true;
+
         this.$store
           .dispatch('uploadImage', {
             bucketType: 'posts',
