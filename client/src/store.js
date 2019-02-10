@@ -1,72 +1,202 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import firebase from 'firebase';
 import router from '@/router';
+import firebase from 'firebase/app';
+import Firebase from './firebase/index.js';
+import md5 from 'md5';
+import moment from 'moment-timezone';
 
 Vue.use(Vuex);
+
+// init momentjs
+moment.lang('ja', {
+  weekdays: ["日曜日","月曜日","火曜日","水曜日","木曜日","金曜日","土曜日"],
+  weekdaysShort: ["日","月","火","水","木","金","土"],
+});
 
 export default new Vuex.Store({
   state: {
     user: null,
-    isAuthenticated: false
+    people: null,
+    posts: [],
+    currentDateJST: moment().tz('Asia/Tokyo'),
+    offPostsListener: null
   },
   getters: {
-    isAuthenticated(state) {
-      return state.user !== null && state.user !== undefined;
+    getUser(state) {
+      return state.user;
+    },
+    getPeople(state) {
+      return state.people
     }
   },
   mutations: {
-    setUser(state, payload) {
-      state.user = payload;
+    updateUser(state, { user }) {
+      Vue.set(state, 'user', user);
     },
-    setIsAuthenticated(state, payload) {
-      state.isAuthenticated = payload;
+    setPeople(state, people) {
+      Vue.set(state, 'people', people);
+    },
+    setPosts(state, payload) {
+      state.posts = payload;
+    },
+    updateCurrentDateJST(state) {
+      // use vue prototype moment, which initialized in main.js
+      state.currentDateJST = moment().tz('Asia/Tokyo');
+    },
+    setOffPostsListener(state, payload) {
+      state.offPostsListener = payload;
     }
   },
   actions: {
-    userLogin({ commit }, { email, password }) {
-      firebase
-        .auth()
+    startSchedules({ commit }) {
+      setInterval(() => {
+        commit('updateCurrentDateJST')
+      }, 1000 * 10); // update every 10 sec.
+    },
+    fetchPosts({ commit }) {
+      console.log('store fetchPosts');
+      const sevenDaysPeriodSec = 60 * 60 * 24 * 7;
+      const unsubscribeFunc = Firebase.firestore
+        .collection('posts')
+        .where('updatedAt', '>=', Date.now() / 1000 - sevenDaysPeriodSec)
+        .onSnapshot(querySnapshot => {
+          let posts = [];
+          querySnapshot.forEach(doc => {
+            posts.push(doc.data());
+          });
+          commit('setPosts', posts);
+        });
+      commit('setOffPostsListener', unsubscribeFunc);
+    },
+    async uploadImage({ state }, { bucketType, imageUrl, imageMimeType }) {
+      const storageRef = Firebase.storage.ref();
+      const uid = state.user.uid;
+      const hash = md5(uid + Date.now().toString());
+      let fileExtention = '';
+      if (imageMimeType == 'image/jpeg') {
+        fileExtention = 'jpg';
+      } else if (imageMimeType == 'image/png') {
+        fileExtention = 'png';
+      } else {
+        throw new Error(`imageMimeType ${imageMimeType} is invalid.`);
+      }
+      let bucket;
+      if (bucketType === 'posts') {
+        bucket = 'posts';
+      } else if (bucketType === 'profiles') {
+        bucket = 'profiles';
+      } else {
+        throw new Error(`unknown bucket type: ${bucketType}`);
+      }
+      const imageStorePath = `${bucket}/${hash}/image.${fileExtention}`;
+      console.log(`try to upload file to ${imageStorePath}`);
+      const fileRef = storageRef.child(imageStorePath);
+      const metadata = { contentType: imageMimeType };
+      const downloadUrl = await fileRef
+        .putString(imageUrl, firebase.storage.StringFormat.DATA_URL, metadata)
+        .then(snapshot => {
+          console.log(snapshot.ref.imageUrl);
+          console.log('Uploaded a blob or file!');
+          return fileRef.getDownloadURL().then(downloadUrl => {
+            return downloadUrl;
+          });
+        });
+      console.log(`downloadUrl is ${downloadUrl}`);
+
+      return downloadUrl;
+    },
+    async storePost(
+      {},
+      { uid, imageDownloadUrl, description, profileImageUrl, fullName }
+    ) {
+      Firebase.firestore
+        .collection('posts')
+        .add({
+          author: {
+            peopleRef: `people/${uid}`,
+            profileImageUrl: profileImageUrl,
+            fullName: fullName,
+            uid: uid
+          },
+          imageUrl: imageDownloadUrl,
+          text: description,
+          title: '',
+          createdAt: Date.now() / 1000,
+          updatedAt: Date.now() / 1000
+        })
+        .then(function(docRef) {
+          console.log('Document written with ID: ', docRef.id);
+        })
+        .catch(function(error) {
+          console.error('Error adding document: ', error);
+        });
+    },
+    async updatePeople({}, { uid, fullName, profileImageUrl }) {
+      Firebase.firestore
+        .collection('people')
+        .doc(uid)
+        .update({
+          fullName: fullName,
+          profileImageUrl: profileImageUrl,
+          updatedAt: Date.now() / 1000
+        })
+        .then(function() {
+          console.log('Document successfully written.');
+        })
+        .catch(function(error) {
+          throw new Error('Error adding document: ', error);
+        });
+    },
+    async userLogin({}, { email, password }) {
+      Firebase.auth
         .signInWithEmailAndPassword(email, password)
-        .then(user => {
-          commit('setUser', user);
-          commit('setIsAuthenticated', true);
+        .then(() => {
           router.push('/timeline');
         })
-        .catch(() => {
-          commit('setUser', null);
-          commit('setIsAuthenticated', false);
-          router.push('/');
+        .catch(error => {
+          console.log(error);
+          router.push('/sign-in');
         });
     },
-    userJoin({ commit }, { email, password }) {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(user => {
-          commit('setUser', user);
-          commit('setIsAuthenticated', true);
-          router.push('/about');
+    async userJoin({}, { user, name, profileImageUrl }) {
+      return Firebase.firestore
+        .collection('people')
+        .doc(user.uid)
+        .set({
+          fullName: name,
+          profileImageUrl: profileImageUrl,
+          createdAt: Date.now() / 1000,
+          updatedAt: Date.now() / 1000
         })
-        .catch(() => {
-          commit('setUser', null);
-          commit('setIsAuthenticated', false);
-          router.push('/');
+        .then(function() {
+          console.log('Document successfully written.');
+        })
+        .catch(function(error) {
+          console.error('Error adding document: ', error);
         });
+    },
+    async fetchPeople({ commit }, { uid }) {
+      Firebase.firestore
+      .collection('people')
+      .doc(uid)
+      .get()
+      .then( doc => {
+        commit('setPeople', doc.data());
+      })
+      .catch((e) => {
+        throw new Error(e);
+      });
     },
     userSignOut({ commit }) {
-      firebase
-        .auth()
+      Firebase.auth
         .signOut()
         .then(() => {
-          commit('setUser', null);
-          commit('setIsAuthenticated', false);
-          router.push('/');
+          commit('setPeople', null);
+          router.push('/sign-in');
         })
         .catch(() => {
-          commit('setUser', null);
-          commit('setIsAuthenticated', false);
-          router.push('/');
+          router.push('/sign-in');
         });
     }
   }
