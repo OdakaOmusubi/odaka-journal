@@ -144,7 +144,7 @@ img {
 
 .post {
   height: 10em;
-  width: 13em;
+  width: 10em;
   border-radius: 1em;
   border: 1px solid #d3d3d3;
 }
