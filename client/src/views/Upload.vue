@@ -10,8 +10,8 @@
             <v-form ref="form" v-model="valid">
                 <image-uploader v-on:childToParent="updateCropImg" :isProfile="false" :isPost="true"></image-uploader>
                <v-textarea name="description" label="説明を書く" id="description"
-                             type="text" required v-model="description" counter="200"
-                             :rules="descriptionRules" full-width height="10em" single-line>
+                             type="text" required v-model="description" counter="80"
+                             :rules="descriptionRules" full-width height="5em" single-line>
                </v-textarea>
             </v-form>
           </v-card-text>

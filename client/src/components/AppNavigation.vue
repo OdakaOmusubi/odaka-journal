@@ -1,6 +1,6 @@
 <template>
   <span>
-    <v-navigation-drawer v-if=false app v-model="drawer" class="brown lighten-2" dark disable-resize-watcher>
+    <!-- <v-navigation-drawer v-if=false app v-model="drawer" class="brown lighten-2" dark disable-resize-watcher>
       <v-list>
         <template v-for="(item, index) in items">
           <v-list-tile :key="index">
@@ -13,23 +13,21 @@
           <v-divider :key="`divider-${index}`"></v-divider>
         </template>
       </v-list>
-    </v-navigation-drawer>
+    
+    </v-navigation-drawer>-->
     <v-toolbar color="transparent" dark fixed flat>
-      <v-toolbar-side-icon class="hidden-md-and-up" @click="drawer = !drawer"></v-toolbar-side-icon>
-      <v-spacer class="hidden-md-and-up"></v-spacer>
-      <router-link to="/timeline">
-        <v-toolbar-title to="/timeline">{{appTitle}}</v-toolbar-title>
-      </router-link>
-      <v-spacer class="hidden-sm-and-down"></v-spacer>
-      <div v-if="!user" class="hidden-sm-and-down">
-        <v-btn flat to="/sign-in">ログイン</v-btn>
-        <v-btn color="brown lighten-3" to="/join">新規登録</v-btn>
-      </div>
-      <div v-else>
-        <v-btn flat to="/about">プロフィール</v-btn>
-        <v-btn outline color="white" @click="logout">ログアウト</v-btn>
-      </div>
-    </v-toolbar>
+          <v-toolbar-side-icon class="hidden-md-and-up" @click="drawer = !drawer"></v-toolbar-side-icon>
+          <v-spacer class="hidden-md-and-up"></v-spacer>
+          <v-toolbar-title to="/timeline"><router-link to="/timeline">{{appTitle}}</router-link></v-toolbar-title>
+          <v-spacer class="hidden-sm-and-down"></v-spacer>
+          <v-toolbar-items class="hidden-sm-and-down">
+              <v-btn v-if="!user" flat to="/sign-in">ログイン</v-btn>
+              <v-btn v-if="!user" flat color="brown lighten-3" to="/join">新規登録</v-btn>
+              <v-btn v-if="user" flat to="/about">プロフィール</v-btn>
+              <v-btn v-if="user" flat outline color="white" @click="logout">ログアウト</v-btn>
+          </v-toolbar-items>
+          
+        </v-toolbar>
   </span>
 </template>
 
