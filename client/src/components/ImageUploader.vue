@@ -2,7 +2,7 @@
     <v-container>
         <v-layout justify-center>
             <v-flex fluid>
-                <img :class="croppedImage" v-show="!showCropper" :src="cropImg" alt="Cropped Image" />
+                <img :class="croppedImage" v-show="!showCropper && cropImg" :src="cropImg" alt="Cropped Image" />
             </v-flex>
         </v-layout>
         <v-layout justify-center>
@@ -142,10 +142,12 @@ img {
   border: 1px solid #d3d3d3;
 }
 
+/*
 .post {
   height: 10em;
   width: 10em;
   border-radius: 1em;
   border: 1px solid #d3d3d3;
 }
+*/
 </style>

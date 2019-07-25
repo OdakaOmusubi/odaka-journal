@@ -61,7 +61,7 @@ body {
 }
 .application--wrap:after {
   content: '';
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255,255,255,0.3);
   position: absolute;
   top: 0;
   left: 0;

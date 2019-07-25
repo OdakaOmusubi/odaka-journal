@@ -2,8 +2,10 @@
 <template>
   <v-container fluid fill-height class="pa-0 timeline-bg">
     <v-layout row wrap class="content" align-center>
-      <v-flex xs12 sm7 class="pa-5">
-        <v-responsive :aspect-ratio="1/1" app>
+      <v-flex xs12 md7
+      :class="{'pa-0': $vuetify.breakpoint.smAndDown, 'pa-5': $vuetify.breakpoint.mdAndUp}"
+      >
+        <v-responsive :aspect-ratio="1/1" app  class="elevation-12">
           <v-carousel fluid height="auto" hide-delimiters interval="10000">
             <v-carousel-item v-for="(item,i) in posts" :key="i" :src="item.imageUrl" class="carouselItems">
               <v-bottom-nav :value="true" absolute color="rgba(0,0,0,.7)">
@@ -11,7 +13,9 @@
                   <v-avatar class="carousel-author" size="56" color="grey lighten-4" absolute top left>
                     <img :src="item.author.profileImageUrl" alt="">
                   </v-avatar>
-                  <span class="display-1"> {{item.author.fullName}}</span>
+                  <span
+                  :class="{'subheading': $vuetify.breakpoint.smAndDown, 'headline': $vuetify.breakpoint.mdAndUp}"
+                  > {{item.author.fullName}}</span>
                   <span> {{item.text}}</span>
                 </div>
               </v-bottom-nav>
@@ -20,13 +24,13 @@
         </v-responsive>
   
       </v-flex>
-      <v-flex xs12 sm5>
+      <v-flex xs12 md7>
         <v-container fill-height class="hidden-sm-and-down">
           <!-- pc,tablet -->
           <v-layout align-center>
             <v-flex class="text-md-center">
               <p class="display-2 white--text">{{ this.currentDateJST.format("YYYY.MM.DD (ddd)")}}</p>
-              <p class="display-4 white--text">{{ this.currentDateJST.format("HH:mm")}}</p>
+              <p class=" white--text time-disp">{{ this.currentDateJST.format("HH:mm")}}</p>
               <v-btn dark fab large color="pink" to="/upload">
                 <v-icon>add</v-icon>
               </v-btn>
@@ -100,5 +104,8 @@ export default {
 .carousel-author {
   top: -16px;
   left: 8px;
+}
+.time-disp {
+  font-size: 140px;
 }
 </style>
