@@ -2,7 +2,7 @@
 <template>
   <v-container fluid fill-height class="pa-0 timeline-bg">
     <v-layout row wrap class="content" align-center>
-      <v-flex sm12 md7
+      <v-flex xs12 md7
       :class="{'pa-0': $vuetify.breakpoint.smAndDown, 'pa-5': $vuetify.breakpoint.mdAndUp}"
       >
         <v-responsive :aspect-ratio="1/1" app  class="elevation-12">
@@ -24,7 +24,7 @@
         </v-responsive>
   
       </v-flex>
-      <v-flex xs12 sm5>
+      <v-flex xs12 md7>
         <v-container fill-height class="hidden-sm-and-down">
           <!-- pc,tablet -->
           <v-layout align-center>
