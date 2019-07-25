@@ -24,7 +24,7 @@
         </v-responsive>
   
       </v-flex>
-      <v-flex xs12 md7>
+      <v-flex xs12 md5>
         <v-container fill-height class="hidden-sm-and-down">
           <!-- pc,tablet -->
           <v-layout align-center>
