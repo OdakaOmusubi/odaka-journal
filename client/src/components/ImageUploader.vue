@@ -114,6 +114,7 @@ export default {
           this.cropImg = event.target.result;
           // rebuild cropperjs with the updated source
           this.$refs.cropper.replace(event.target.result);
+          this.editFile();
         };
         reader.readAsDataURL(file);
       } else {
@@ -125,6 +126,10 @@ export default {
       // get image data for post processing, e.g. upload or setting image src
       this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
       this.showCropper = false;
+      return {
+        imageUrl: this.cropImg,
+        imageMimeType: this.imageMimeType
+      }
     }
   }
 };
